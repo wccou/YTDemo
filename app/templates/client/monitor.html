@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head lang="en">
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>指令下发</title>
+
+    <link href="../../static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../../static/bootstrap-3.3.5/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../../static/upload/buttons.css" rel="stylesheet" type="text/css"/>
+    <link href="../../static/upload/default.css" rel="stylesheet" type="text/css"/>
+    <link href="../../static/upload/fileinput.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../../static/tabs/css/demo.css" rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" type="text/css" href="../../static/tabs/css/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/tabs/css/tabstyles.css" />
+    <script src="../../static/tabs/js/modernizr.custom.js"></script>
+<script src="../../static/bootstrap-3.3.5/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+<script src="../../static/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+function check(object)
+{
+    var value = object.value;
+    if(value=="unicast")
+    {
+        document.getElementById('ipselect').style.display="block";
+    }
+    else if (value=="mcast")
+    {
+        document.getElementById('ipselect').style.display="none";
+    }
+}
+</script>
+<script type="text/javascript">
+function check2(object)
+{
+    var value = object.value;
+    if(value=="unicast")
+    {
+        document.getElementById('ipselect2').style.display="block";
+    }
+    else if (value=="mcast")
+    {
+        document.getElementById('ipselect2').style.display="none";
+    }
+}
+</script>
+<script type="text/javascript">
+function check4(object)
+{
+    var value = object.value;
+    if(value=="unicast_ack")
+    {
+        document.getElementById('ipselect4').style.display="block";
+    }
+    else if (value=="mcast_ack")
+    {
+        document.getElementById('ipselect4').style.display="none";
+    }
+}
+</script>
+<script type="text/javascript">
+function del()
+{
+    var msg = "恢复出厂设置:\n请确认！";
+    if (confirm(msg)==true)
+    {
+        var ins_reset=document.getElementById('instruction_reset');
+        ins_reset.submit();
+    }   
+    else
+    {
+        return false;
+    }
+}
+</script>
+<script type="text/javascript">
+function check5(object)
+{
+    var value = object.value;
+    if(value=="unicast_ack")
+    {
+        document.getElementById('ipselect5').style.display="block";
+    }
+    else if (value=="mcast_ack")
+    {
+        document.getElementById('ipselect5').style.display="none";
+    }
+}
+</script>
+
+</head>
+
+
+<body>
+    <div class="container">
+        
+        <section>
+            <div class="tabs tabs-style-underline container-fluid">
+                <nav>
+                    <ul>
+                        <li><a href="#section-underline-1"><span>指令下发</span></a></li>
+                        <li><a href="#section-underline-2"><span>指令烧写</span></a></li>
+                        <li><a href="#section-underline-3"><span>修改网络参数</span></a></li>
+                        <li><a href="#section-underline-4"><span>节点重启</span></a></li>
+                        <li><a href="#section-underline-5"><span>恢复出厂</span></a></li>
+                        <li><a href="#section-underline-6"><span>设定根节点校时周期</span></a></li>
+                    </ul>
+                </nav>
+                <div class="content-wrap">
+                    <section id="section-underline-1">
+                        <form name="instruction_send" target="iframe1" method="POST" action='{{url_for('instruction_send')}}'>
+ 
+
+                       <hr>
+                       <div class="container">  
+                        <input  style="height:41px; font-size:19px" type="text" name="emit_data" placeholder={{send_data}}>
+                        <select style="height:41px; font-size:19px" id="mySelect"   name="mySelect" onchange="check(this)">
+                            <option value="mcast" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
+                            <option value="unicast" >&nbsp;单&nbsp;播&nbsp;</option>
+                        </select>
+                         <button type="submit" class="btn btn-success" style="height:40px; font-size:19px">指令下发</button>
+                        <div id="ipselect" style="display: none">    
+                        <label>节点选择:</label>
+                        <select style="height:40px; font-size:19px" name="nodeIP" onchange="check(this)">
+                            <option value="aaaa:0:0:0:12:7400:1:13">aaaa:0:0:0:12:7400:1:13</option>
+                            <option value="aaaa:0:0:0:12:7400:1:49">aaaa:0:0:0:12:7400:1:49</option>
+                            <option value="aaaa:0:0:0:12:7400:1:f3">aaaa:0:0:0:12:7400:1:f3</option>
+                            <option value="aaaa:0:0:0:12:7400:1:79">aaaa:0:0:0:12:7400:1:79</option>
+                        </select>
+                        </div>
+                       </div>
+                       
+                        
+
+                        </form>
+                        <iframe id="iframe1" name="iframe1" style="display:none;"></iframe> 
+
+                    </section>
+                    <section id="section-underline-2">
+                    <form name="instruction_write" method="POST" target="iframe2" action='{{url_for('instruction_write')}}'>
+                       <hr>
+                      
+                        <input  style="height:41px; font-size:19px" type="text" name="write_data" placeholder="{{write_data}}"/>
+
+                        <select style="height:41px; font-size:19px"  id="mySelect2" name="mySelect2" onchange="check2(this)">
+                            <option value="mcast" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
+                            <option value="unicast" >&nbsp;单&nbsp;播&nbsp;</option>
+                        </select>
+                    <button style="height:40px; font-size:19px" type="submit" class="btn btn-success" style="width:107px;height:48px;">指令烧写</button>
+
+                        <div  id="ipselect2" style="display: none">    
+                        <label>节点选择:</label>
+                        
+                        <select style="height:41px; font-size:19px" name="nodeIP2" onchange="check2(this)">
+                            <option value="aaaa:0:0:0:12:7400:1:13">aaaa:0:0:0:12:7400:1:13</option>
+                            <option value="aaaa:0:0:0:12:7400:1:49">aaaa:0:0:0:12:7400:1:49</option>
+                            <option value="aaaa:0:0:0:12:7400:1:f3">aaaa:0:0:0:12:7400:1:f3</option>
+                            <option value="aaaa:0:0:0:12:7400:1:79">aaaa:0:0:0:12:7400:1:79</option>
+                        </select>
+                        </div>
+                        <br />
+                      
+                        
+
+                        </form>
+                        <iframe id="iframe2" name="iframe2" style="display:none;"></iframe> 
+                    </section>
+                    <section id="section-underline-3">
+                        <table>
+        
+        
+        <tr>
+            <td>
+                       <hr>
+            
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <form class="form-inline" name="instruction3" target="iframe3" method="POST" action='{{url_for('instruction3')}}'>
+                    <fieldset id="box">
+                        <span>网络参数配置指令下发:（请输入０～２５５之间的整数）</span>
+                    <hr>
+                        <label> PANID:  </label>
+                        <input type="text" name="PANID" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        onblur="if(this.value>255){alert('不能大于255！');this.focus();}"
+                        style = "position:relative; left:56px;" placeholder={{display_datadict["PANID"]}}><br />
+                        <label> CCA:    </label>
+                         <input type="text" name="CCA" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        onblur="if(this.value>255){alert('不能大于255！');this.focus();}"
+                        style = "position:relative; left:68px;" placeholder={{display_datadict["CCA"]}}><br />
+                        <label>发射功率:  </label>
+                        <input type="text" name="emitpower" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        onblur="if(this.value>255){alert('不能大于255！');this.focus();}"
+                        style = "position:relative; left:44px;" placeholder={{display_datadict["emitpower"]}}><br />
+                        <label>CCA检查周期:</label>
+                        <input type="text" name="CCAcheckingperiod" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        onblur="if(this.value>255){alert('不能大于255！');this.focus();}"
+                        style = "position:relative; left:18px;" placeholder={{display_datadict["CCAcheckingperiod"]}}><br />
+                        <label>inactive:  </label>
+                        <input type="text" name="inactive" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        onblur="if(this.value>255){alert('不能大于255！');this.focus();}"
+                        style = "position:relative; left:50px;" placeholder={{display_datadict["inactive"]}}><br />
+                        <label>channel:   </label>
+                        <input type="text" name="channel" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        onblur="if(this.value>255){alert('不能大于255！');this.focus();}"
+                        style = "position:relative; left:48px;" placeholder={{display_datadict["channel"]}}><br />
+                        <label>DIO_minlen: </label>
+                        <input type="text" name="DIO_minlen" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        onblur="if(this.value>255){alert('不能大于255！');this.focus();}"
+                        style = "position:relative; left:27px;" placeholder={{display_datadict["DIO_minlen"]}}><br />
+                        <label>DIO_max:    </label>
+                        <input type="text" name="DIO_max" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        onblur="if(this.value>255){alert('不能大于255！');this.focus();}"
+                        style = "position:relative; left:43px;" placeholder={{display_datadict["DIO_max"]}}><br />
+                    </fieldset> 
+                <input type="submit" value="提交" />
+                </form>
+                        <iframe id="iframe3" name="iframe3" style="display:none;"></iframe> 
+
+            </div>
+        </div>
+    </div>
+</td>
+        </tr>
+    </table>
+                    </section>
+                    <section id="section-underline-4">
+                        <form name="instruction_restart" target="iframe4" method="POST" action='{{url_for('instruction_restart')}}'>
+                       <hr>
+                 
+
+                        <select style="height:41px; font-size:19px" id="mySelect4" name="mySelect4" onchange="check4(this)">
+                            <option value="mcast_ack" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
+                            <option value="unicast_ack" >&nbsp;单&nbsp;播&nbsp;</option>
+                        </select>
+                     　<button style="height:40px; font-size:19px" type="submit" class="btn btn-success">重启指令下发
+                     </button>
+                        <div id="ipselect4" style="display: none">   
+                        <label>节点选择:</label>
+
+                         <select style="height:41px; font-size:19px" name="nodeIP4" onchange="check4(this)">
+                            <option value="aaaa:0:0:0:12:7400:1:13">aaaa:0:0:0:12:7400:1:13</option>
+                            <option value="aaaa:0:0:0:12:7400:1:49">aaaa:0:0:0:12:7400:1:49</option>
+                            <option value="aaaa:0:0:0:12:7400:1:f3">aaaa:0:0:0:12:7400:1:f3</option>
+                            <option value="aaaa:0:0:0:12:7400:1:79">aaaa:0:0:0:12:7400:1:79</option>
+                        </select>
+                        </div>
+                 　
+                        
+
+                        
+
+                        </form>
+                        <iframe id="iframe4" name="iframe4" style="display:none;"></iframe> 
+
+                    </section>
+                    <section id="section-underline-5">
+                    <form name="instruction_reset" target="iframe5" id="instruction_reset" method="POST" action='{{url_for('instruction_reset')}}'>
+                      
+                       <hr>
+
+                        <select style="height:41px; font-size:19px" id="mySelect5" name="mySelect5" onchange="check5(this)">
+                            <option value="mcast_ack" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
+                            <option value="unicast_ack" >&nbsp;单&nbsp;播&nbsp;</option>
+                        </select>
+                  　 　
+                        <button style="height:40px; font-size:19px" type="button" class="btn btn-success" onclick="del()" 　>恢复出厂设置</button>
+
+                        <div id="ipselect5" style="display: none">    
+                        <label>节点选择:</label>
+                        
+                        <select style="height:41px; font-size:19px" name="nodeIP5" onchange="check5(this)">
+                            <option value="aaaa:0:0:0:12:7400:1:13">aaaa:0:0:0:12:7400:1:13</option>
+                            <option value="aaaa:0:0:0:12:7400:1:49">aaaa:0:0:0:12:7400:1:49</option>
+                            <option value="aaaa:0:0:0:12:7400:1:f3">aaaa:0:0:0:12:7400:1:f3</option>
+                            <option value="aaaa:0:0:0:12:7400:1:79">aaaa:0:0:0:12:7400:1:79</option>
+                        </select>
+                        </div>
+                     
+                       
+
+                        </form>
+                        <iframe id="iframe5" name="iframe5" style="display:none;"></iframe> 
+
+                    </section>
+                    <section id="section-underline-6">
+                    <form name="instruction_adjtime" target="iframe6" method="POST" action='{{url_for('instruction_adjtime')}}'>
+                       <hr>
+                 
+                        <input type="text" name="timeperiod" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" onblur="if(this.value>9999){alert('校时周期过长！');this.focus();}"
+                         placeholder={{adjtime_data}}>
+
+                        <button style="width:60px　height:40px; font-size:19px" type="submit" class="btn btn-success" 　>设定根节点校时周期</button>
+                        
+
+                        </form>
+                        <iframe id="iframe6" name="iframe6" style="display:none;"></iframe> 
+
+                    </section>
+                </div>
+            </div>
+        </section>
+            
+
+        </div><!-- /container -->
+        <script src="../../static/tabs/js/cbpFWTabs.js"></script>
+        <script>
+            (function() {
+                [].slice.call( document.querySelectorAll( '.tabs' ) ).forEach( function( el ) {
+                    new CBPFWTabs( el );
+                });
+            })();
+        </script>
+
+
+
+
+
+
+    <br>
+
+
+</body>
+
+</html>
