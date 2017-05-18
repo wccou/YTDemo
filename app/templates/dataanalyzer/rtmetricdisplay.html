@@ -74,7 +74,7 @@
                                 }
                             }, function(start, end, label) {//格式化日期显示框                                
                                 $('#reportrange span').html(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
-                                console.log(start.format('YYYY-MM-DD HH:mm:ss'))
+                                // console.log(start.format('YYYY-MM-DD HH:mm:ss'))
                                 $('#timesrange').val(($('#reportrange span').html()));
                            });
          
@@ -162,7 +162,7 @@ $(function () {
                 }
             }
         },
-        series: {{rtxdata_list}}
+        series:{{rtxdata_list}}
     });
 });
 
