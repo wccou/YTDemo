@@ -129,7 +129,6 @@ def rtmetricdisplay():
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         rtxdata_list = multipledisplay(start_time,end_time,"rtimetric")
-        
         return render_template('./dataanalyzer/rtmetricdisplay.html',rtxdata_list=rtxdata_list[0],time=rtxdata_list[1])
     else:
         t = time.time()
