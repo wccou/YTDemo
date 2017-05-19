@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Guoxuenan
 # @Date:   2016-12-27 22:09:33
-# @Last Modified by:   Gxn
-# @Last Modified time: 2017-05-06 23:35:10
+# @Last Modified by:   Guoxuenan
+# @Last Modified time: 2017-05-19 15:50:14
 
 # -*- coding: utf-8 -*-
 import xmlrpclib
@@ -68,6 +68,44 @@ def stopAllProcesses():
 		info=sys.exc_info()
 		print info[0],":",info[1]		
 	return True
+#  @param string name         the name of the process (or 'group:name')
+#  @param int offset          offset to start reading from
+#  @param int length          maximum number of bytes to return
+#  @return array result       [string bytes, int offset, bool overflow]
+# def getNewlog(name,start):
+# 	try:
+# 		server=xmlrpclib.Server('http://localhost:9001/RPC2')
+# 		# print server.supervisor.tailProcessStderrLog(name,offset,length)
+# 		# length=getTotalBytes(name)-start
+# 		length=1000
+# 		# print "==========",getTotalBytes(name),start,length
+# 		return server.supervisor.readProcessLog(name,start,length)
+# 	except:
+# 		info=sys.exc_info()
+# 		print info[0],":",info[1]		
+# 		return None
+
+# def getTotalBytes(name):
+# 	try:
+# 		server=xmlrpclib.Server('http://localhost:9001/RPC2')
+# 		# print server.supervisor.tailProcessStderrLog(name,offset,length)
+# 		print server.supervisor.getAllConfigInfo()
+# 		return server.supervisor.tailProcessLog(name,0,0)[1]
+# 	except:
+# 		info=sys.exc_info()
+# 		print info[0],":",info[1]		
+# 		return -1
+
+# count=getTotalBytes("concentratorback")
+# print count
+# while True:
+# 	log=getNewlog("concentratorback",count)
+# 	if(log!=None):
+# 		print log.encode("utf-8"),
+# 		count=getTotalBytes("concentratorback")
+# 	time.sleep(1)
+ 
+	
 
 # stopAllProcesses()
 # print getAllProcessInfo()

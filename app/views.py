@@ -47,7 +47,7 @@ DATABASE   =DBClass()
 NODE_DICT_NET=dict()
 NODE_SET=set()
  
-
+COUNTER=0
 #--------------------------------------------------------首页，上传---------------------------------------------
 #首页
 @app.route('/', methods=['POST', 'GET'])
@@ -1372,29 +1372,40 @@ def supervisor_stop_all():
         processInfo  = getAllProcessInfo()
         return render_template('./supervisor/supervisor.html',processInfo=processInfo)
 
+@app.route('/tailflogback/', methods=['POST', 'GET'])
+def tailflogback():
+    if PCAPS == None:
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    else:
+        config=Connect()
+        url="http://"+config.all_config_json()["serverIp"]+":9001"+"/logtail/concentratorback"
+        # print url
+        return redirect(url)
 
-
-
+@app.route('/tailflogtunslip/', methods=['POST', 'GET'])
+def tailflogtunslip():
+    if PCAPS == None:
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    else:
+        config=Connect()
+        url="http://"+config.all_config_json()["serverIp"]+":9001"+"/logtail/tunslip6"
+        # print url
+        return redirect(url)
 
 
 @app.route('/test/', methods=['POST', 'GET'])
 def test():
+    global COUNTER
     if PCAPS == None:
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
-    elif request.method == 'POST':
-        selectime  =  request.form['field_name']
-        start_time = selectime.encode("utf-8")[0:19]
-        end_time = selectime.encode("utf-8")[22:41]
-        data = data_error_new(start_time,end_time)
-        # print data
-        return render_template('./upload/timestamp.html', vwarning=data[0],iwarning=data[1])
     else:
-        t = time.time()
-        current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
-        previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))
-        data = data_error_new(previous_time,current_time)
-        return render_template('./upload/timestamp.html', vwarning=data[0],iwarning=data[1])
+        # COUNTER=getTotalBytes("concentratorback")
+        # print "init",COUNTER
+        return  render_template('./upload/timestamp.html',log='1')
+
 # ----------------------------------------------数据包构造页面---------------------------------------------
 #协议说明
 @app.route('/nettools/', methods=['POST', 'GET'])
