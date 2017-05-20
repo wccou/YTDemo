@@ -588,8 +588,12 @@ def monitor():
         adjtime_data = display.adjtime_display()
         display_datadict = display.parameters_display()
         # print display_datadict
+        IP_list = list()
+        IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
+        for item in IP_set:
+            IP_list.append(item[0].lower())
 
-    return render_template('./client/monitor.html',send_data = send_data, write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict)
+    return render_template('./client/monitor.html',send_data = send_data, write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict,IP_list=IP_list)
 
 @app.route('/instruction_send/', methods=['POST', 'GET'])
 @app.route('/instruction_send', methods=['POST', 'GET'])
@@ -632,7 +636,6 @@ def instruction_send():
         ins = json.dumps(dicts)
     sendins.TCP_send(ins)
     # print ins
-    
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_write/', methods=['POST', 'GET'])
@@ -1416,14 +1419,19 @@ def tailflogtunslip():
 
 @app.route('/test/', methods=['POST', 'GET'])
 def test():
-    global COUNTER
+    # global COUNTER
     if PCAPS == None:
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
+        IP_list = list()
+        IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
+        for item in IP_set:
+            IP_list.append(item[0])
+        print IP_list
         # COUNTER=getTotalBytes("concentratorback")
         # print "init",COUNTER
-        return  render_template('./upload/timestamp.html',log='1')
+        return  render_template('./upload/timestamp.html',IP_list=IP_list)
 
 # ----------------------------------------------数据包构造页面---------------------------------------------
 #协议说明
