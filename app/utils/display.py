@@ -217,7 +217,7 @@ def node_time_display(time1,time2,db,node):
     for time in data:
         time_ms = int(mktime(strptime(time[0],'%Y-%m-%d %H:%M:%S'))*1000)
         count += 1
-        timelist.append([time_ms,count])
+        timelist.append([str(time_ms),count])
     dicts = dict()
     dicts["name"] = node.encode('ascii')
     dicts["data"] = timelist

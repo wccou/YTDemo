@@ -219,7 +219,7 @@ def syn_error(time1,time2):
         dicts=dict()
         time_ms = int(time.mktime(time.strptime(x[2],'%Y-%m-%d %H:%M:%S'))*1000)
         dicts["name"] = x[0].encode('ascii')
-        dicts["data"] = [int(time_ms),int(x[1])]
+        dicts["data"] = [str(time_ms),int(x[1])]
         dlist.append(dicts)     
         # {'data': [1493568035000L, 835], 'name': u'0101'}
 

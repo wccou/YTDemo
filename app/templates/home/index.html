@@ -396,7 +396,7 @@
  							</a> 
  
  						</li> 
-
+<!-- 
  						<li > 
  
  							<a href="{{ url_for('nettools') }}" target="main-content"> 
@@ -409,8 +409,17 @@
  								<a href="{{ url_for('protohelp') }}" target="main-content"> 
  							   协议说明 
  							</a> 
+ 						</li> -->
+ 						<li>
+ 								<a href="{{ url_for('tailflogback') }}" target="main-content"> 
+ 							   集中器后台日志
+ 							</a> 
  						</li>
-
+ 						<li>
+ 								<a href="{{ url_for('tailflogtunslip') }}" target="main-content"> 
+ 							   Tunslip日志管理 
+ 							</a> 
+ 						</li>
 						<li>
  								<a href="{{ url_for('terminaltool') }}" target="main-content"> 
  							   命令行工具 
@@ -442,14 +451,14 @@
 
  				<li class=""> 
  
- 				    <a  href="{{url_for('test')}}" >
+ 				    <a  href="{{url_for('tailflogback')}}" >
 				       <i class="icon-refresh"></i>
  						<span class="title">TEST</span> 
  					<!-- <span class="arrow "></span>  -->
 				   </a>
  
  				</li> 
-
+ 	 
 
 			</ul>
 

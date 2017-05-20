@@ -8,7 +8,7 @@
 	 Clear all process log files
 
         @return array result   An array of process status info structs
-        
+
 ## supervisor.clearLog
 	 Clear the main log.
 

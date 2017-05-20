@@ -21,7 +21,7 @@
     "rootRoomId": "512",
     "rootX": 12,
     "rootY": 20,
-    "serverIp": "127.0.0.1",
+    "serverIp": "192.168.1.152",
     "tcpAddr": "0.0.0.0",
     "tcpByWebPort": 12301,
     "tcpPort": 12300,
