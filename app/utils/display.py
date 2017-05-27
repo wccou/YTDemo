@@ -19,9 +19,10 @@ def multipledisplay(time1,time2,dbitems):
     Data_set = DATABASE.my_db_execute(("select NodeID,"+ dbitems +",currenttime from NetMonitor where currenttime >= ? and currenttime <= ?;"),(time1, time2))    
     for x in Data_set:
         dicts=dict()
-        time_ms = int(time.mktime(time.strptime(x[2],'%Y-%m-%d %H:%M:%S'))*1000)
+        time_ms = time.mktime(time.strptime(x[2],'%Y-%m-%d %H:%M:%S'))*1000
         dicts["name"] = x[0].encode('ascii')
-        dicts["data"] = [str(time_ms),int(x[1])]
+        # print time_ms
+        dicts["data"] = [time_ms,int(x[1])]
         dlist.append(dicts)     
         # {'data': [1493568035000L, 835], 'name': u'0101'}
 
@@ -255,9 +256,9 @@ def node_time_display(time1,time2,db,node):
     count = 0
     timelist = list()
     for time in data:
-        time_ms = int(mktime(strptime(time[0],'%Y-%m-%d %H:%M:%S'))*1000)
+        time_ms = mktime(strptime(time[0],'%Y-%m-%d %H:%M:%S'))*1000
         count += 1
-        timelist.append([str(time_ms),count])
+        timelist.append([time_ms,count])
     dicts = dict()
     dicts["name"] = node.encode('ascii')
     dicts["data"] = timelist
