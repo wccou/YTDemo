@@ -290,7 +290,7 @@ def deploy_info():
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
-        nodeplace = DATABASE.my_db_execute("select ID, NodeID, MeterID, Place from NodePlace;",None)
+        nodeplace = DATABASE.my_db_execute("select ID, NodeID, MeterID, Place,IP from NodePlace;",None)
         return render_template('./dataanalyzer/deploy_info.html',nodeplace = nodeplace)
 
 @app.route('/deploy_modify/', methods=['POST', 'GET'])
@@ -299,10 +299,23 @@ def deploy_modify():
     flag = 0  #flag==0 未修改 flag==1 修改了 flag==2 NodeID长度过长 flag==3 NodeID长度为3 flag==4 NodeID长度为2 flag==5 NodeID长度为1 flag==1 NodeID长度为4
     if request.method == 'POST':
         ID = request.form["ID"]
-        old_data = DATABASE.my_db_execute("select ID, NodeID, MeterID, Place from NodePlace where ID=?;",(ID,))
+        nodeid_set = set()
+        hexcharset = set("1234567890abcdefABCDEF")
+        ipcharset = set("1234567890abcdefABCDEF:")
+        old_nodeid = DATABASE.my_db_execute("select distinct NodeID from NodePlace",None)
+        for node in old_nodeid:
+            nodeid_set.add(str(node[0]))
+        old_data = DATABASE.my_db_execute("select ID, NodeID, MeterID, Place, IP from NodePlace where ID=?;",(ID,))
         # conn.close()          
         NodeID = str(request.form["NodeID"])
+        if set(NodeID) - (set(NodeID) & hexcharset): #如果有非16进制字符
+            return "节点ID输入非法,请输入16进制字符"
         MeterID = str(request.form["MeterID"])
+        if set(MeterID) - (set(MeterID) & hexcharset): #如果有非16进制字符
+            return "表ID输入非法,请输入16进制字符"
+        IP = str(request.form["IP"])
+        if set(IP) - (set(IP) & ipcharset): #如果有非16进制字符
+            return "IP输入非法,请输入16进制字符"
         Place = request.form["Place"]
         if len(NodeID) == 4:
             # print old_data[0]
@@ -311,6 +324,8 @@ def deploy_modify():
             elif (str(old_data[0][2]) != MeterID):
                 flag = 1
             elif (old_data[0][3] != Place):
+                flag = 1
+            elif (old_data[0][4] != IP):
                 flag = 1
             else:
                 flag = 0
@@ -328,40 +343,36 @@ def deploy_modify():
         elif flag==2:
             return "节点ID长度过长，请重新输入！(4位)"
         elif flag==3:
-            node=DATABASE.my_db_execute("select NodeID from NodePlace where NodeID=?;",("0"+str(NodeID),))
-            if node:
+            if ("0"+str(node)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
-                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID) VALUES (?,?,?,?);",(ID,str("0"+str(NodeID)),Place,str(MeterID)))
+                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("0"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==4:
-            node=DATABASE.my_db_execute("select NodeID from NodePlace where NodeID=?;",("00"+str(NodeID),))
-            if node:
+            if ("00"+str(node)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
-                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID) VALUES (?,?,?,?);",(ID,str("00"+str(NodeID)),Place,str(MeterID)))
+                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("00"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==5:
-            node=DATABASE.my_db_execute("select NodeID from NodePlace where NodeID=?;",("000"+str(NodeID),))
-            if node:
+            if ("000"+str(node)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
-                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID) VALUES (?,?,?,?);",(ID,str("000"+str(NodeID)),Place,str(MeterID)))
+                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("000"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==1:
-            node=DATABASE.my_db_execute("select NodeID from NodePlace where NodeID=?;",(NodeID,))
-            if node:
+            if str(node) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
-                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID) VALUES (?,?,?,?);",(ID,NodeID,Place,str(MeterID)))
+                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,NodeID,Place,str(MeterID),str(IP)))
             return "更改成功"
         else:
             DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
-            DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID) VALUES (?,?,?,?);",(ID,str(NodeID),Place,str(MeterID)))
+            DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str(NodeID),Place,str(MeterID),str(IP)))
             return "更改成功"
 
 @app.route('/deploy_del/', methods=['POST', 'GET'])
@@ -377,7 +388,7 @@ def deploy_del():
         if item:
             DATABASE.db_del_or_insert("delete from NodePlace where ID=? ;",(item,))
 
-    nodeplace = DATABASE.my_db_execute("select ID, NodeID, MeterID, Place from NodePlace;",None)
+    nodeplace = DATABASE.my_db_execute("select ID, NodeID, MeterID, Place,IP from NodePlace;",None)
 
 
     return render_template('./dataanalyzer/deploy_info.html',nodeplace = nodeplace)
@@ -385,40 +396,48 @@ def deploy_del():
 @app.route('/deploy_add/', methods=['POST', 'GET'])
 @app.route('/deploy_add', methods=['POST', 'GET'])
 def deploy_add():
-    databasepath = os.path.join(app.config['TOPO_FOLDER'],"topo3.db")
     if request.method == 'POST':
+        hexcharset = set("1234567890abcdefABCDEF")
+        ipcharset = set("1234567890abcdefABCDEF:")
+        old_nodeid = DATABASE.my_db_execute("select distinct NodeID from NodePlace",None)
+        nodeid_set = set()
+        for node in old_nodeid:
+            nodeid_set.add(str(node[0]))
         NodeID = str(request.form["NodeID"])
+        if set(NodeID) - (set(NodeID) & hexcharset): #如果有非16进制字符
+            return "节点ID输入非法,请输入16进制字符"
         MeterID = str(request.form["MeterID"])
+        if set(MeterID) - (set(MeterID) & hexcharset): #如果有非16进制字符
+            return "表ID输入非法,请输入16进制字符"
+        IP = str(request.form["IP"])
+        if set(IP) - (set(IP) & ipcharset): #如果有非16进制字符
+            return "IP输入非法,请输入16进制字符"
         Place = request.form["Place"]
         # print NodeID, MeterID, Place
         if len(NodeID) == 4:
-            node=DATABASE.my_db_execute("select NodeID from NodePlace where NodeID=?;",(NodeID,))
-            if node:
+            if str(node) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
-                DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID) VALUES (?,?,?);",(str(NodeID),Place,str(MeterID)))
+                DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID,IP) VALUES (?,?,?,?);",(str(NodeID),Place,str(MeterID),str(IP)))
         elif len(NodeID) > 4:
             return "节点ID长度过长，请重新输入！(4位)"
         elif len(NodeID) == 3:
-            node=DATABASE.my_db_execute("select NodeID from NodePlace where NodeID=?;",("0"+str(NodeID),))
-            if node:
+            if ("0"+str(node)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
-                DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID) VALUES (?,?,?);",("0"+str(NodeID),Place,str(MeterID)))
+                DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID,IP) VALUES (?,?,?,?);",("0"+str(NodeID),Place,str(MeterID),str(IP)))
         elif len(NodeID) == 2:
-            node=DATABASE.my_db_execute("select NodeID from NodePlace where NodeID=?;",("00"+str(NodeID),))
-            if node:
+            if ("00"+str(node)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
-                DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID) VALUES (?,?,?);",("00"+str(NodeID),Place,str(MeterID)))
+                DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID,IP) VALUES (?,?,?,?);",("00"+str(NodeID),Place,str(MeterID),str(IP)))
         elif len(NodeID) == 1:
-            node=DATABASE.my_db_execute("select NodeID from NodePlace where NodeID=?;",("000"+str(NodeID),))
-            if node:
+            if ("000"+str(node)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
-                DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID) VALUES (?,?,?);",("000"+str(NodeID),Place,str(MeterID)))
+                DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID,IP) VALUES (?,?,?,?);",("000"+str(NodeID),Place,str(MeterID),str(IP)))
      
-    nodeplace = DATABASE.my_db_execute("select ID, NodeID, MeterID, Place from NodePlace;",None)
+    nodeplace = DATABASE.my_db_execute("select ID, NodeID, MeterID, Place, IP from NodePlace;",None)
     return "添加成功"
 
 #节点信息查询
@@ -571,8 +590,12 @@ def monitor():
         adjtime_data = display.adjtime_display()
         display_datadict = display.parameters_display()
         # print display_datadict
+        IP_list = list()
+        IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
+        for item in IP_set:
+            IP_list.append(item[0].lower())
 
-    return render_template('./client/monitor.html',send_data = send_data, write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict)
+    return render_template('./client/monitor.html',send_data = send_data, write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict,IP_list=IP_list)
 
 @app.route('/instruction_send/', methods=['POST', 'GET'])
 @app.route('/instruction_send', methods=['POST', 'GET'])
@@ -615,7 +638,6 @@ def instruction_send():
         ins = json.dumps(dicts)
     sendins.TCP_send(ins)
     # print ins
-    
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_write/', methods=['POST', 'GET'])
@@ -1399,14 +1421,19 @@ def tailflogtunslip():
 
 @app.route('/test/', methods=['POST', 'GET'])
 def test():
-    global COUNTER
+    # global COUNTER
     if PCAPS == None:
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
+        IP_list = list()
+        IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
+        for item in IP_set:
+            IP_list.append(item[0])
+        print IP_list
         # COUNTER=getTotalBytes("concentratorback")
         # print "init",COUNTER
-        return  render_template('./upload/timestamp.html',log='1')
+        return  render_template('./upload/timestamp.html',IP_list=IP_list)
 
 # ----------------------------------------------数据包构造页面---------------------------------------------
 #协议说明

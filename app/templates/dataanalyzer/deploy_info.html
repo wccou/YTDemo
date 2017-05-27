@@ -68,7 +68,7 @@
         function append() {  
             var numberoftr = document.getElementsByTagName("tbody")[0].getElementsByTagName('tr').length;
             // console.log(numberoftr);
-            var strAppend = '<tr style="background: rgb(255, 255, 255) none repeat scroll 0% 0%;"><th class="text-center"><input type="checkbox" value="" editable="false" name="checkbox"></th><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><th class="text-center"><button type="submit" onclick="addnew('+numberoftr+')">添加</th></tr>';
+            var strAppend = '<tr style="background: rgb(255, 255, 255) none repeat scroll 0% 0%;"><th class="text-center"><input type="checkbox" value="" editable="false" name="checkbox"></th><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><th class="text-center"><button type="submit" onclick="addnew('+numberoftr+')">添加</th></tr>';
 
   
             $("#AddFamily tbody ").append(strAppend).editableTableWidget();  
@@ -92,12 +92,13 @@
             }
             var NodeID = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[i].getElementsByTagName('td')[0].innerHTML;
             var MeterID = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[i].getElementsByTagName('td')[1].innerHTML;
-            var Place = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML;
-            // console.log(id,nodeid,MeterID,Place);
+            var IP = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML;
+            var Place = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[i].getElementsByTagName('td')[3].innerHTML;
+            console.log(IP);
             $.ajax({
             type:"POST",
             url:"{{url_for('deploy_modify')}}",
-            data:{ID:id,NodeID:NodeID,MeterID:MeterID,Place:Place},
+            data:{ID:id,NodeID:NodeID,MeterID:MeterID,IP:IP,Place:Place},
             datatype: "json",
             success: function(dat) { alert(dat);
                     if (dat == "更改成功")
@@ -146,7 +147,10 @@
             var MeterID = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[numberoftr].getElementsByTagName('td')[1].innerHTML;
             if(MeterID.length==0){    
             flag++;}
-            var Place = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[numberoftr].getElementsByTagName('td')[2].innerHTML;
+            var IP = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[numberoftr].getElementsByTagName('td')[2].innerHTML;
+            if(IP.length==0){    
+            flag++;}
+            var Place = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[numberoftr].getElementsByTagName('td')[3].innerHTML;
             if(Place.length==0){    
             flag++;}
             if (flag)
@@ -158,7 +162,7 @@
                 $.ajax({
                 type:"POST",
                 url:"{{url_for('deploy_add')}}",
-                data:{NodeID:NodeID, MeterID:MeterID, Place:Place},
+                data:{NodeID:NodeID, MeterID:MeterID, IP:IP,Place:Place},
                 datatype: "json",
                 success: function(dat) { alert(dat);
                     if (dat == "添加成功")
@@ -217,6 +221,7 @@
                 <th class="text-center" >  </th>
             <th class="text-center">节点ID</th>
             <th class="text-center">表ID</th>
+            <th class="text-center">IP地址</th>
             <th class="text-center">地理位置</th>
             <th class="text-center">提交更改</th>
             </thead>  
@@ -230,6 +235,7 @@
               <!-- <th scope="row" class="text-center" id = "id">{{ item[0] }}</th> -->
                   <td class="text-nowrap text-center" id = "NodeID">{{ item[1] }}</td>
                   <td class="text-center text-nowrap" id = "MeterID">{{ item[2] }}</td>
+                  <td class="text-center text-nowrap" id = "IP">{{ item[4] }}</td>
                   <td class="text-center text-nowrap" id = "Place">{{ item[3] }}</td>
                   <th class="text-center text-nowrap">
                   <button id="btnEdit" type="button" class="btn   btn-warning" onclick="modify()">  
@@ -399,7 +405,7 @@
             cloneProperties: ['padding', 'padding-top', 'padding-bottom', 'padding-left', 'padding-right',  
                 'text-align', 'font', 'font-size', 'font-family', 'font-weight',  
                 'border', 'border-top', 'border-bottom', 'border-left', 'border-right'],  
-            editor: $('<input onkeyup="this.value=this.value.replace(/[^0-9a-fA-F]/g,&apos;&apos;).toUpperCase()" onafterpaste="this.value=this.value.replace(/[^0-9a-fA-F]/g,&apos;&apos;).toUpperCase()">')  
+            editor: $('<input onkeyup="this.value=this.value.toUpperCase()" onafterpaste="this.value=this.value.toUpperCase()">')  
         };  
   
   
