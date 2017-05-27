@@ -95,7 +95,8 @@ data5. CCAcheckingperiod - CCA检查周期
 data6. inactive
 data7. DIO_minlen
 data8. DIO_max
-梓皓最近任务：
+                              
+梓皓最近任务：            
 1：把每个highcharts 展示的图都比照 currentdisplay.html 添加     
 	（1）缩放功能 zoomType:"x";currentdisplay.html的134行     
 	 (2) 横轴时间格式化  143~146行              
