@@ -90,6 +90,46 @@ def singledisplay(time1,time2,dbitem):
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     return ID_list,data_list,timedisplay
 
+def restart_display(time1,time2,dbitem):
+    ID_list = NetID_list(time1,time2)
+    ID_set = set(ID_list)
+    data_dict = dict()
+    data_dict1 = dict()
+    ID_lists = list()
+    data_list = list()
+    data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime asc;"),(time1, time2))
+    if len(data)!=0:
+        counter=len(data)-1
+        while len(ID_set)>0:
+            if data[counter][1] in ID_set:
+                data_dict[data[counter][1]] = data[counter][0]
+                ID_set.remove(data[counter][1])
+            counter=counter-1
+
+    ID_list = NetID_list(time1,time2)
+    ID_set = set(ID_list)
+    data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime desc;"),(time1, time2))
+    if len(data)!=0:
+        counter=len(data)-1
+        while len(ID_set)>0:
+            if data[counter][1] in ID_set:
+                data_dict1[data[counter][1]] = data[counter][0]
+                ID_set.remove(data[counter][1])
+            counter=counter-1
+    # print data_dict
+    # print data_dict1
+
+    count=0
+    for key, value in data_dict.items():
+        data_list.append(value-data_dict1[key])
+        count+=1
+        if count%2!=0:
+            key+='      '
+        ID_lists.append(key.encode("ascii"))
+    # print data_list
+    timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
+    return ID_lists,data_list,timedisplay
+
 def energy_display(time1,time2):
     cpu_list = list()
     lpm_list = list()
