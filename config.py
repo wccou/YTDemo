@@ -18,3 +18,4 @@ CONFIG_FOLDER = '/root/concentratorback/'
 #DB_FOLDER     = '/home/winzzhhzzhh/lab/Concentrator/datalog/'
 #CLIENT_FOLDER = '/home/winzzhhzzhh/lab/Concentrator/socket/'
 #CONFIG_FOLDER = '/home/winzzhhzzhh/lab/Concentrator/app/utils/Config'
+

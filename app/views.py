@@ -10,7 +10,7 @@ from utils.gxn_topo_decode  import TopoDecode
 from utils.gxn_get_sys_config import Config
 from utils.connect import Connect
 from utils.db_operate import DBClass
-from utils.display import multipledisplay,singledisplay,NetID_list,NetID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,appflowdisplay
+from utils.display import multipledisplay,singledisplay,restart_display,NetID_list,NetID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,appflowdisplay
 from utils.error import data_error_new,syn_error
 
 from utils.old_data_display import Display, Modify
@@ -232,13 +232,15 @@ def restartdisplay():
         selectime  =  request.form['field_name']
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
-        dataset = singledisplay(start_time,end_time,"reboot")
+        dataset = restart_display(start_time,end_time,"reboot")
+        # print dataset[0],dataset[1]
+        restart_display(start_time,end_time,"reboot")
         return render_template('./dataanalyzer/restartdisplay.html', nodecount = len(dataset[0]), ID_list = dataset[0], reboot_list = dataset[1],time=dataset[2])
     else:
         t = time.time()
         current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
         previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))
-        dataset = singledisplay(previous_time,current_time,"reboot")
+        dataset = restart_display(previous_time,current_time,"reboot")
         return render_template('./dataanalyzer/restartdisplay.html', nodecount = len(dataset[0]), ID_list = dataset[0], reboot_list = dataset[1],time=dataset[2])
 
 #节点邻居数展示
@@ -588,8 +590,12 @@ def monitor():
         adjtime_data = display.adjtime_display()
         display_datadict = display.parameters_display()
         # print display_datadict
+        IP_list = list()
+        IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
+        for item in IP_set:
+            IP_list.append("xxx")
 
-    return render_template('./client/monitor.html',send_data = send_data, write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict)
+    return render_template('./client/monitor.html',send_data = send_data, write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict,IP_list=IP_list)
 
 @app.route('/instruction_send/', methods=['POST', 'GET'])
 @app.route('/instruction_send', methods=['POST', 'GET'])
@@ -632,7 +638,6 @@ def instruction_send():
         ins = json.dumps(dicts)
     sendins.TCP_send(ins)
     # print ins
-    
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_write/', methods=['POST', 'GET'])
@@ -1416,14 +1421,19 @@ def tailflogtunslip():
 
 @app.route('/test/', methods=['POST', 'GET'])
 def test():
-    global COUNTER
+    # global COUNTER
     if PCAPS == None:
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
+        IP_list = list()
+        IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
+        for item in IP_set:
+            IP_list.append(item[0])
+        print IP_list
         # COUNTER=getTotalBytes("concentratorback")
         # print "init",COUNTER
-        return  render_template('./upload/timestamp.html',log='1')
+        return  render_template('./upload/timestamp.html',IP_list=IP_list)
 
 # ----------------------------------------------数据包构造页面---------------------------------------------
 #协议说明

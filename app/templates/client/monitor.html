@@ -111,7 +111,7 @@ function check5(object)
                 <div class="content-wrap">
                     <section id="section-underline-1">
                         <form name="instruction_send" target="iframe1" method="POST" action='{{url_for('instruction_send')}}'>
- 
+
 
                        <hr>
                        <div class="container">  
@@ -124,10 +124,9 @@ function check5(object)
                         <div id="ipselect" style="display: none">    
                         <label>节点选择:</label>
                         <select style="height:40px; font-size:19px" name="nodeIP" onchange="check(this)">
-                            <option value="aaaa:0:0:0:12:7400:1:13">aaaa:0:0:0:12:7400:1:13</option>
-                            <option value="aaaa:0:0:0:12:7400:1:49">aaaa:0:0:0:12:7400:1:49</option>
-                            <option value="aaaa:0:0:0:12:7400:1:f3">aaaa:0:0:0:12:7400:1:f3</option>
-                            <option value="aaaa:0:0:0:12:7400:1:79">aaaa:0:0:0:12:7400:1:79</option>
+                        {% for item in IP_list: %}
+                            <option value={{item}}>{{item}}</option>
+                        {% endfor %}
                         </select>
                         </div>
                        </div>
@@ -154,10 +153,9 @@ function check5(object)
                         <label>节点选择:</label>
                         
                         <select style="height:41px; font-size:19px" name="nodeIP2" onchange="check2(this)">
-                            <option value="aaaa:0:0:0:12:7400:1:13">aaaa:0:0:0:12:7400:1:13</option>
-                            <option value="aaaa:0:0:0:12:7400:1:49">aaaa:0:0:0:12:7400:1:49</option>
-                            <option value="aaaa:0:0:0:12:7400:1:f3">aaaa:0:0:0:12:7400:1:f3</option>
-                            <option value="aaaa:0:0:0:12:7400:1:79">aaaa:0:0:0:12:7400:1:79</option>
+                            {% for item in IP_list: %}
+                            <option value={{item}}>{{item}}</option>
+                            {% endfor %}
                         </select>
                         </div>
                         <br />
@@ -241,10 +239,9 @@ function check5(object)
                         <label>节点选择:</label>
 
                          <select style="height:41px; font-size:19px" name="nodeIP4" onchange="check4(this)">
-                            <option value="aaaa:0:0:0:12:7400:1:13">aaaa:0:0:0:12:7400:1:13</option>
-                            <option value="aaaa:0:0:0:12:7400:1:49">aaaa:0:0:0:12:7400:1:49</option>
-                            <option value="aaaa:0:0:0:12:7400:1:f3">aaaa:0:0:0:12:7400:1:f3</option>
-                            <option value="aaaa:0:0:0:12:7400:1:79">aaaa:0:0:0:12:7400:1:79</option>
+                            {% for item in IP_list: %}
+                            <option value={{item}}>{{item}}</option>
+                            {% endfor %}
                         </select>
                         </div>
                  　
@@ -272,10 +269,9 @@ function check5(object)
                         <label>节点选择:</label>
                         
                         <select style="height:41px; font-size:19px" name="nodeIP5" onchange="check5(this)">
-                            <option value="aaaa:0:0:0:12:7400:1:13">aaaa:0:0:0:12:7400:1:13</option>
-                            <option value="aaaa:0:0:0:12:7400:1:49">aaaa:0:0:0:12:7400:1:49</option>
-                            <option value="aaaa:0:0:0:12:7400:1:f3">aaaa:0:0:0:12:7400:1:f3</option>
-                            <option value="aaaa:0:0:0:12:7400:1:79">aaaa:0:0:0:12:7400:1:79</option>
+                            {% for item in IP_list: %}
+                            <option value={{item}}>{{item}}</option>
+                            {% endfor %}
                         </select>
                         </div>
                      

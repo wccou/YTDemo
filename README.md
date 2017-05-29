@@ -95,4 +95,16 @@ data5. CCAcheckingperiod - CCA检查周期
 data6. inactive
 data7. DIO_minlen
 data8. DIO_max
+                              
+梓皓最近任务：            
+1：把每个highcharts 展示的图都比照 currentdisplay.html 添加     
+	（1）缩放功能 zoomType:"x";currentdisplay.html的134行     
+	 (2) 横轴时间格式化  143~146行              
+	 （3） 将tooltip改为显示 月-日 156行             
+2： 部署信息表 IP地址有问题，lower（）函数 用于Nonetype时候存在问题 未做判断 【部署信息位置可以输入中文 需要继续处理】                
+3： 拓扑展示 有问题 请修改                 
+4：应用数据分析下边的随时间变化 的 节点号下拉框，请把节点号格式规范一下，按照 四个十六进制大写字符来表示【其他都一样请统一】                 
+5：节点查询中 运行基本参数的节点电压变化中，电压值保留两位小数，要处理【其它类似请自行处理】                   
+6：时间同步报警的差值修改为 绝对值7s              
+7：网络数据 电流标红色的阈值修改为 25uA               
 
