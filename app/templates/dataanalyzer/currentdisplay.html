@@ -130,9 +130,9 @@
 $(function () {
     $('#topo').highcharts({
         chart: {
-            type: 'spline'
+            type: 'spline',
+            zoomType: 'x'
         },
-        zoomType:"x",
         title:"平均电流",
         xAxis: {
             type: 'datetime',
@@ -147,7 +147,7 @@ $(function () {
         },
         tooltip: {
             headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.x:%e. %b}: {point.y:.2f}'
+            pointFormat: '{point.x:%b %e}: {point.y}μA'
         },
         plotOptions: {
             spline: {
@@ -161,8 +161,6 @@ $(function () {
 });
 
 </script>
-
-    </script>
 
 
 {% endautoescape %}

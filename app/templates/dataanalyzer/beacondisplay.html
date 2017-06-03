@@ -131,7 +131,8 @@
 $(function () {
     $('#topo').highcharts({
         chart: {
-            type: 'spline'
+            type: 'spline',
+            zoomType: 'x'
         },
         title:"信标间隔",
         xAxis: {
@@ -147,7 +148,7 @@ $(function () {
         },
         tooltip: {
             headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.x:%e. %b}: {point.y:.2f}'
+            pointFormat: '{point.x:%b %e}: {point.y}'
         },
         plotOptions: {
             spline: {

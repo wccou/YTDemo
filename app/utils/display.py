@@ -16,6 +16,7 @@ def multipledisplay(time1,time2,dbitems):
     data_list = list() #形如[ [Date.UTC(1970,  9, 27), 0],[Date.UTC(1970, 10, 10), 0.6 ],...]
 
     dlist=  list()
+    timelist = list()
     Data_set = DATABASE.my_db_execute(("select NodeID,"+ dbitems +",currenttime from NetMonitor where currenttime >= ? and currenttime <= ?;"),(time1, time2))    
     for x in Data_set:
         dicts=dict()
@@ -44,51 +45,51 @@ def NetID_list(time1,time2):
     ID_list = list()
     ID_set = DATABASE.my_db_execute("select distinct NodeID from NetMonitor where currenttime >= ? and currenttime <= ?;",(time1, time2))
     for i in range(len(ID_set)):
-        # if len(ID_set[i][0])==3:
-        #     ID = "0"+ID_set[i][0].upper()
-        # elif len(ID_set[i][0]) ==2:
-        #     ID = "00"+ID_set[i][0].upper()
-        # elif len(ID_set[i][0])==1:
-        #     ID = "000"+ID_set[i][0].upper()
-        # elif len(ID_set[i][0])==4:
-        #     ID = ID_set[i][0].upper()
-        # else:
-        #     return False
-        ID_list.append(ID_set[i][0].encode('ascii'))
+        if len(ID_set[i][0])==3:
+            ID = "0"+ID_set[i][0].upper()
+        elif len(ID_set[i][0]) ==2:
+            ID = "00"+ID_set[i][0].upper()
+        elif len(ID_set[i][0])==1:
+            ID = "000"+ID_set[i][0].upper()
+        elif len(ID_set[i][0])==4:
+            ID = ID_set[i][0].upper()
+        else:
+            return False
+        ID_list.append(ID.encode('ascii'))
     return ID_list
 
 def NetID_all():
     ID_list = list()
     ID_set = DATABASE.my_db_execute("select distinct NodeID from NetMonitor;",None)
     for i in range(len(ID_set)):
-    #     if len(ID_set[i][0])==3:
-    #         ID = "0"+ID_set[i][0].upper()
-    #     elif len(ID_set[i][0]) ==2:
-    #         ID = "00"+ID_set[i][0].upper()
-    #     elif len(ID_set[i][0])==1:
-    #         ID = "000"+ID_set[i][0].upper()
-    #     elif len(ID_set[i][0])==4:
-    #         ID = ID_set[i][0].upper()
-    #     else:
-    #         return False
-        ID_list.append(ID_set[i][0].encode('ascii'))
+        if len(ID_set[i][0])==3:
+            ID = "0"+ID_set[i][0].upper()
+        elif len(ID_set[i][0]) ==2:
+            ID = "00"+ID_set[i][0].upper()
+        elif len(ID_set[i][0])==1:
+            ID = "000"+ID_set[i][0].upper()
+        elif len(ID_set[i][0])==4:
+            ID = ID_set[i][0].upper()
+        else:
+            return False
+        ID_list.append(ID.encode('ascii'))
     return ID_list
 
 def AppID_all():
     ID_list = list()
     ID_set = DATABASE.my_db_execute("select distinct NodeID from ApplicationData;",None)
     for i in range(len(ID_set)):
-        # if len(ID_set[i][0])==3:
-        #     ID = "0"+ID_set[i][0].upper()
-        # elif len(ID_set[i][0]) ==2:
-        #     ID = "00"+ID_set[i][0].upper()
-        # elif len(ID_set[i][0])==1:
-        #     ID = "000"+ID_set[i][0].upper()
-        # elif len(ID_set[i][0])==4:
-        #     ID = ID_set[i][0].upper()
-        # else:
-        #     return False
-        ID_list.append(ID_set[i][0].encode('ascii'))
+        if len(ID_set[i][0])==3:
+            ID = "0"+ID_set[i][0].upper()
+        elif len(ID_set[i][0]) ==2:
+            ID = "00"+ID_set[i][0].upper()
+        elif len(ID_set[i][0])==1:
+            ID = "000"+ID_set[i][0].upper()
+        elif len(ID_set[i][0])==4:
+            ID = ID_set[i][0].upper()
+        else:
+            return False
+        ID_list.append(ID.encode('ascii'))
     return ID_list
 
 def singledisplay(time1,time2,dbitem):
