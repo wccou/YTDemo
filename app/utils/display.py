@@ -16,8 +16,8 @@ def multipledisplay(time1,time2,dbitems):
     data_list = list() #形如[ [Date.UTC(1970,  9, 27), 0],[Date.UTC(1970, 10, 10), 0.6 ],...]
 
     dlist=  list()
-    timelist = list()
     Data_set = DATABASE.my_db_execute(("select NodeID,"+ dbitems +",currenttime from NetMonitor where currenttime >= ? and currenttime <= ?;"),(time1, time2))    
+    # print time1,time2,Data_set
     for x in Data_set:
         dicts=dict()
         time_ms = time.mktime(time.strptime(x[2],'%Y-%m-%d %H:%M:%S'))*1000
@@ -26,6 +26,7 @@ def multipledisplay(time1,time2,dbitems):
         dicts["data"] = [time_ms,int(x[1])]
         dlist.append(dicts)     
         # {'data': [1493568035000L, 835], 'name': u'0101'}
+
     dicttemp=dict()
     for x in dlist:
         if x["name"] in dicttemp:
@@ -40,6 +41,7 @@ def multipledisplay(time1,time2,dbitems):
         # print dicts
         data_list.append(dicts)
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
+    # print data_list
     return data_list,timedisplay
 
 def NetID_list(time1,time2):
@@ -120,46 +122,6 @@ def singledisplay(time1,time2,dbitem):
         data_list=[]
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     return ID_list,data_list,timedisplay
-
-def restart_display(time1,time2,dbitem):
-    ID_list = NetID_list(time1,time2)
-    ID_set = set(ID_list)
-    data_dict = dict()
-    data_dict1 = dict()
-    ID_lists = list()
-    data_list = list()
-    data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime asc;"),(time1, time2))
-    if len(data)!=0:
-        counter=len(data)-1
-        while len(ID_set)>0:
-            if data[counter][1] in ID_set:
-                data_dict[data[counter][1]] = data[counter][0]
-                ID_set.remove(data[counter][1])
-            counter=counter-1
-
-    ID_list = NetID_list(time1,time2)
-    ID_set = set(ID_list)
-    data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime desc;"),(time1, time2))
-    if len(data)!=0:
-        counter=len(data)-1
-        while len(ID_set)>0:
-            if data[counter][1] in ID_set:
-                data_dict1[data[counter][1]] = data[counter][0]
-                ID_set.remove(data[counter][1])
-            counter=counter-1
-    # print data_dict
-    # print data_dict1
-
-    count=0
-    for key, value in data_dict.items():
-        data_list.append(value-data_dict1[key])
-        count+=1
-        if count%2!=0:
-            key+='      '
-        ID_lists.append(key.encode("ascii"))
-    # print data_list
-    timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
-    return ID_lists,data_list,timedisplay
 
 def energy_display(time1,time2):
     cpu_list = list()
@@ -286,9 +248,9 @@ def node_time_display(time1,time2,db,node):
     count = 0
     timelist = list()
     for time in data:
-        time_ms = mktime(strptime(time[0],'%Y-%m-%d %H:%M:%S'))*1000
+        time_ms = int(mktime(strptime(time[0],'%Y-%m-%d %H:%M:%S'))*1000)
         count += 1
-        timelist.append([time_ms,count])
+        timelist.append([str(time_ms),count])
     dicts = dict()
     dicts["name"] = node.encode('ascii')
     dicts["data"] = timelist

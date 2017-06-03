@@ -137,6 +137,11 @@ $(function () {
             type: 'datetime',
             title: {
                 text: null
+            },
+              labels: {  
+                formatter: function() {  
+                    return  Highcharts.dateFormat('%Y-%m-%d  %H:%M', this.value);  
+                },
             }
         },
         yAxis: {
