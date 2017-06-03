@@ -1133,6 +1133,16 @@ def appdataanalyzer():
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         nodepick  =  request.form['nodeselect']
+        # #olddatabase
+        # nodepick = nodepick.lower()
+        # for i in range(len(nodepick)):
+        #     if nodepick[i] != 0:
+        #         first = i
+        #         break
+        # nodepick = nodepick[first:]
+        # print nodepick
+
+        # #
         timelist = node_time_display(start_time,end_time,"ApplicationData",nodepick)
         return render_template('./dataanalyzer/appdataanalyzer.html',timelist=timelist[0], nodelist = nodeid_list,time=timelist[1],node=nodepick)
     else:

@@ -49,7 +49,7 @@ def data_error_new(time1,time2):
     #         }
     #     ]
     # }
-    idata = DATABASE.my_db_execute('select electric, NodeID, currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and electric>600;',(time1, time2))
+    idata = DATABASE.my_db_execute('select electric, NodeID, currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and electric>25;',(time1, time2))
     if idata:
         nodedict = dict()
         for i in idata:
@@ -212,7 +212,7 @@ def syn_error(time1,time2):
     data_list = list() #形如[ [Date.UTC(1970,  9, 27), 0],[Date.UTC(1970, 10, 10), 0.6 ],...]
     nodes = set()
     dlist=  list()
-    Data_set = DATABASE.my_db_execute(("select NodeID,syntime,currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and (syntime>30 or syntime<-30);"),(time1, time2))    
+    Data_set = DATABASE.my_db_execute(("select NodeID,syntime,currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and (syntime>7 or syntime<-7);"),(time1, time2))    
     for x in Data_set:
         if x[0] not in nodes:
             nodes.add(x[0])

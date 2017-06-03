@@ -24,7 +24,6 @@ def multipledisplay(time1,time2,dbitems):
         dicts["data"] = [str(time_ms),int(x[1])]
         dlist.append(dicts)     
         # {'data': [1493568035000L, 835], 'name': u'0101'}
-
     dicttemp=dict()
     for x in dlist:
         if x["name"] in dicttemp:
@@ -45,6 +44,16 @@ def NetID_list(time1,time2):
     ID_list = list()
     ID_set = DATABASE.my_db_execute("select distinct NodeID from NetMonitor where currenttime >= ? and currenttime <= ?;",(time1, time2))
     for i in range(len(ID_set)):
+        # if len(ID_set[i][0])==3:
+        #     ID = "0"+ID_set[i][0].upper()
+        # elif len(ID_set[i][0]) ==2:
+        #     ID = "00"+ID_set[i][0].upper()
+        # elif len(ID_set[i][0])==1:
+        #     ID = "000"+ID_set[i][0].upper()
+        # elif len(ID_set[i][0])==4:
+        #     ID = ID_set[i][0].upper()
+        # else:
+        #     return False
         ID_list.append(ID_set[i][0].encode('ascii'))
     return ID_list
 
@@ -52,6 +61,16 @@ def NetID_all():
     ID_list = list()
     ID_set = DATABASE.my_db_execute("select distinct NodeID from NetMonitor;",None)
     for i in range(len(ID_set)):
+    #     if len(ID_set[i][0])==3:
+    #         ID = "0"+ID_set[i][0].upper()
+    #     elif len(ID_set[i][0]) ==2:
+    #         ID = "00"+ID_set[i][0].upper()
+    #     elif len(ID_set[i][0])==1:
+    #         ID = "000"+ID_set[i][0].upper()
+    #     elif len(ID_set[i][0])==4:
+    #         ID = ID_set[i][0].upper()
+    #     else:
+    #         return False
         ID_list.append(ID_set[i][0].encode('ascii'))
     return ID_list
 
@@ -59,6 +78,16 @@ def AppID_all():
     ID_list = list()
     ID_set = DATABASE.my_db_execute("select distinct NodeID from ApplicationData;",None)
     for i in range(len(ID_set)):
+        # if len(ID_set[i][0])==3:
+        #     ID = "0"+ID_set[i][0].upper()
+        # elif len(ID_set[i][0]) ==2:
+        #     ID = "00"+ID_set[i][0].upper()
+        # elif len(ID_set[i][0])==1:
+        #     ID = "000"+ID_set[i][0].upper()
+        # elif len(ID_set[i][0])==4:
+        #     ID = ID_set[i][0].upper()
+        # else:
+        #     return False
         ID_list.append(ID_set[i][0].encode('ascii'))
     return ID_list
 
@@ -190,7 +219,7 @@ def nodesearch_display(time1,time2,node):
     voltage = DATABASE.my_db_execute('select currenttime, volage from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
     for i in range(len(voltage)):
         time_list_1.append(voltage[i][0].encode('ascii'))
-        voltage_list.append(voltage[i][1])
+        voltage_list.append(round(float(voltage[i][1]),2))
     current = DATABASE.my_db_execute('select currenttime, electric from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
     for i in range(len(current)):
         time_list_2.append(current[i][0].encode('ascii'))

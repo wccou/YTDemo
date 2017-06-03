@@ -201,14 +201,14 @@ function ifnull() {
           <td class="text-center text-nowrap">{{ pcaps[i][1] }}</td>
           <td class="text-left text-nowrap">{{ pcaps[i][2] }}</td>
           <td class="text-center">{{ pcaps[i][15] }}</td>
-          {% if pcaps[i][8] < -10 or pcaps[i][8] > 10 %}
+          {% if pcaps[i][8] < -7 or pcaps[i][8] > 7 %}
           <td class="text-center" id="syntime" style="color:Red">{{ pcaps[i][8] }}</td>
           {% else %}
           <td class="text-center" >{{ pcaps[i][8] }}</td>
           {% endif %}
           <td class="text-center">{{ pcaps[i][13] }}</td>
           <td class="text-center">{{ pcaps[i][14] }}</td>
-          {% if pcaps[i][17]  > 600 %}
+          {% if pcaps[i][17]  > 25 %}
           <td class="text-center" id="current" style="color:Red">{{ pcaps[i][17] }}</td>
           {% else %}
           <td class="text-center" id="current">{{ pcaps[i][17] }}</td>
