@@ -94,6 +94,46 @@ def AppID_all():
             return False
         ID_list.append(ID.encode('ascii'))
     return ID_list
+    
+def restart_display(time1,time2,dbitem):
+    ID_list = NetID_list(time1,time2)
+    ID_set = set(ID_list)
+    data_dict = dict()
+    data_dict1 = dict()
+    ID_lists = list()
+    data_list = list()
+    data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime asc;"),(time1, time2))
+    if len(data)!=0:
+        counter=len(data)-1
+        while len(ID_set)>0:
+            if data[counter][1] in ID_set:
+                data_dict[data[counter][1]] = data[counter][0]
+                ID_set.remove(data[counter][1])
+            counter=counter-1
+
+    ID_list = NetID_list(time1,time2)
+    ID_set = set(ID_list)
+    data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime desc;"),(time1, time2))
+    if len(data)!=0:
+        counter=len(data)-1
+        while len(ID_set)>0:
+            if data[counter][1] in ID_set:
+                data_dict1[data[counter][1]] = data[counter][0]
+                ID_set.remove(data[counter][1])
+            counter=counter-1
+    # print data_dict
+    # print data_dict1
+
+    count=0
+    for key, value in data_dict.items():
+        data_list.append(value-data_dict1[key])
+        count+=1
+        if count%2!=0:
+            key+='      '
+        ID_lists.append(key.encode("ascii"))
+    # print data_list
+    timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
+    return ID_lists,data_list,timedisplay
 
 def singledisplay(time1,time2,dbitem):
     ID_list = NetID_list(time1,time2)
@@ -248,9 +288,9 @@ def node_time_display(time1,time2,db,node):
     count = 0
     timelist = list()
     for time in data:
-        time_ms = int(mktime(strptime(time[0],'%Y-%m-%d %H:%M:%S'))*1000)
+        time_ms = mktime(strptime(time[0],'%Y-%m-%d %H:%M:%S'))*1000
         count += 1
-        timelist.append([str(time_ms),count])
+        timelist.append([time_ms,count])
     dicts = dict()
     dicts["name"] = node.encode('ascii')
     dicts["data"] = timelist
@@ -313,26 +353,26 @@ def topo_display(time1,time2):
     links = list()
     n = dict()
     m = dict()
-    if rootID not in Parentnode.keys():
-        rootIDjson = {"category":0, "name":"root:"+str(rootID.encode('ascii'))}
-        nodes.append(rootIDjson)
-        for key ,value in Parentnode.items():
+    # if rootID not in Parentnode.keys():
+    #     rootIDjson = {"category":0, "name":"root:"+str(rootID.encode('ascii'))}
+    #     nodes.append(rootIDjson)
+    #     for key ,value in Parentnode.items():
+    #         n = {"category":1, "name":key.encode('ascii')}
+    #         nodes.append(n)
+    #         m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
+    #         links.append(m)
+    # else:
+    for key ,value in Parentnode.items():
+        if key==rootID:
+            n = {"category":0, "name":key.encode('ascii')}
+            nodes.append(n)
+            m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
+            links.append(m)
+        else:
             n = {"category":1, "name":key.encode('ascii')}
             nodes.append(n)
             m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
             links.append(m)
-    else:
-        for key ,value in Parentnode.items():
-            if key==rootID:
-                n = {"category":0, "name":key.encode('ascii')}
-                nodes.append(n)
-                m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
-                links.append(m)
-            else:
-                n = {"category":1, "name":key.encode('ascii')}
-                nodes.append(n)
-                m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
-                links.append(m)
     # links.append({"source":"0073","target":"0035","weight":1})
     # print len(links)
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')

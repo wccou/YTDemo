@@ -10,7 +10,7 @@ from utils.gxn_topo_decode  import TopoDecode
 from utils.gxn_get_sys_config import Config
 from utils.connect import Connect
 from utils.db_operate import DBClass
-from utils.display import multipledisplay,singledisplay,NetID_list,NetID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,appflowdisplay
+from utils.display import multipledisplay,singledisplay,NetID_list,NetID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,appflowdisplay,restart_display
 from utils.error import data_error_new,syn_error
 
 from utils.old_data_display import Display, Modify
