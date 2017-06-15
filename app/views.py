@@ -593,7 +593,7 @@ def monitor():
         IP_list = list()
         IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
         for item in IP_set:
-            IP_list.append("AAAA:0:0:0:12:7400:2:"+item)
+            IP_list.append("AAAA:0:0:0:12:7400:2:"+str(item))
 
     return render_template('./client/monitor.html',send_data = send_data, write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict,IP_list=IP_list)
 
