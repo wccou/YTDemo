@@ -51,6 +51,7 @@ def data_error_new(time1,time2):
     # }
     idata = DATABASE.my_db_execute('select electric, NodeID, currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and electric>25;',(time1, time2))
     if idata:
+        # print idata
         nodedict = dict()
         for i in idata:
             warning_dict_temp = dict()
@@ -81,7 +82,9 @@ def data_error_new(time1,time2):
                 warning_dict_temp["name"] = i[1].encode('ascii') #NodeID
                 warning_dict_temp["evolution"] = evolution_list
                 nodedict[i[1]]=warning_dict_temp
-        warning_list_i.append(warning_dict_temp)
+            warning_list_i.append(warning_dict_temp)
+        # print warning_list_i
+        # print nodedict
     else:
         warning_dict_i = dict()
         warning_dict_temp = dict()

@@ -35,6 +35,8 @@ PDF_NAME = ''
 
 # ---------------------------------------------------------------------------
 PCAPS = 'yeslogin' #login
+# PCAPS = None #login
+
 HIT_USER ='root'#用户名
 HIT_PWD  ='xiaoming'  #默认密码
 TOPODATA   = None #login

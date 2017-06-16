@@ -130,14 +130,15 @@
 <h4 align="center">Rtmetric</h4>
 <h4 align="center">当前选取时间为:{{time}}</h4>
 <br><!--常见协议和数据包长度图-->
-<div id="topo" style="height:1000px;width:90%;float:center"></div>
+<div id="topo" style="height:600px;width:90%;float:center"></div>
 
 {% autoescape false %}
 <script type="text/javascript">
 $(function () {
     $('#topo').highcharts({
         chart: {
-            type: 'spline'
+            type: 'spline',
+            zoomType: 'x'
         },
         title:"Rtmetric",
         xAxis: {
