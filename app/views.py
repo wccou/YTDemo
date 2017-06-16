@@ -624,7 +624,11 @@ def instruction_send():
             recvdata = display.send_display() #旧数据
 
         transmit_type = request.form['mySelect']
-        nodeip = request.form['nodeIP']
+        nodeip = request.form.getlist('NodeIP')
+        if len(nodeip)>5:
+            nodeip=nodeip[0:5]
+        elif len(nodeip)==0:
+            transmit_type="mcast"
     if datalength:
         datalist.append(datalength)
     datalist.append(recvdata)
@@ -666,7 +670,11 @@ def instruction_write():
             display = Display()
             recvdata = display.write_display() #旧数据
         transmit_type = request.form['mySelect2']
-        nodeip = request.form['nodeIP2']
+        nodeip = request.form.getlist('NodeIP2')
+        if len(nodeip)>5:
+            nodeip=nodeip[0:5]
+        elif len(nodeip)==0:
+            transmit_type="mcast"
     if datalength:
         datalist.append(datalength)
     datalist.append(recvdata)
@@ -680,7 +688,7 @@ def instruction_write():
         addrlist.append(nodeip)
         dicts["addrList"] = addrlist
         ins = json.dumps(dicts)
-
+    # print ins
     sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 @app.route('/instruction_restart/', methods=['POST', 'GET'])
@@ -692,7 +700,11 @@ def instruction_restart():
     dicts["pama_data"] = "C0"
     if request.method == 'POST':
         transmit_type = request.form['mySelect4']
-        nodeip = request.form['nodeIP4']
+        nodeip = request.form.getlist('NodeIP4')
+        if len(nodeip)>5:
+            nodeip=nodeip[0:5]
+        elif len(nodeip)==0:
+            transmit_type="mcast"
     dicts["type"] = transmit_type
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
@@ -714,7 +726,11 @@ def instruction_reset():
     dicts["pama_data"] = "C1"
     if request.method == 'POST':
         transmit_type = request.form['mySelect5']
-        nodeip = request.form['nodeIP5']
+        nodeip = request.form.getlist('NodeIP5')
+        if len(nodeip)>5:
+            nodeip=nodeip[0:5]
+        elif len(nodeip)==0:
+            transmit_type="mcast"
     dicts["type"] = transmit_type
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
@@ -1434,19 +1450,7 @@ def tailflogtunslip():
 
 @app.route('/test/', methods=['POST', 'GET'])
 def test():
-    # global COUNTER
-    if PCAPS == None:
-        flash(u"请完成认证登陆!")
-        return redirect(url_for('login'))
-    else:
-        IP_list = list()
-        IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
-        for item in IP_set:
-            IP_list.append(item[0])
-        print IP_list
-        # COUNTER=getTotalBytes("concentratorback")
-        # print "init",COUNTER
-        return  render_template('./upload/timestamp.html',IP_list=IP_list)
+    return  render_template('./upload/timestamp.html')
 
 # ----------------------------------------------数据包构造页面---------------------------------------------
 #协议说明
