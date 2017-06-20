@@ -233,40 +233,49 @@ $.post("{{url_for('upload_modify')}}", {id:id,HeartIntSec:HeartIntSec,AckHeartIn
         <table class="table table-hover table-responsive  table-condensed table-striped" align="center">
             <tbody> 
                 <tr>       
-                    <th width="25%"> id </th>
-                    <td width="35%" id="id">{{json_dict['id']}}</td>
+                    <th width="30%"> id </th>
+                    <th width="30%"> 集中器编号 </th>
+                    <td width="40%" id="id">{{json_dict['id']}}</td>
                 </tr>
                 <tr>       
-                    <th width="25%"> HeartIntSec </th>
-                    <td width="35%" id="HeartIntSec">{{json_dict['HeartIntSec']}}</td>
+                    <th width="30%"> HeartIntSec </th>
+                    <th width="30%"> 心跳间隔 </th>
+                    <td width="40%" id="HeartIntSec">{{json_dict['HeartIntSec']}}</td>
                 </tr>
                 <tr>         
-                    <th width="25%">AckHeartInt</th>
-                    <td width="35%" id="AckHeartInt">{{json_dict['AckHeartInt']}}</td>
+                    <th width="30%">AckHeartInt</th>
+                    <th width="30%">ACK心跳间隔</th>
+                    <td width="40%" id="AckHeartInt">{{json_dict['AckHeartInt']}}</td>
                 </tr>
                 <tr>         
-                    <th width="25%">rootAddr</th>
-                    <td width="35%" id="rootAddr">{{json_dict['rootAddr']}}</td>
+                    <th width="30%">rootAddr</th>
+                    <th width="30%">根IP地址</th>
+                    <td width="40%" id="rootAddr">{{json_dict['rootAddr']}}</td>
                 </tr>
                 <tr>         
-                    <th width="25%">ftpuser</th>
-                    <td width="35%" id="ftpuser">{{json_dict['ftpuser']}}</td>
+                    <th width="30%">ftpuser</th>
+                    <th width="30%">ftp用户名</th>
+                    <td width="40%" id="ftpuser">{{json_dict['ftpuser']}}</td>
                 </tr>
                 <tr>         
-                    <th width="25%">ftphost</th>
-                    <td width="35%" id="ftphost">{{json_dict['ftphost']}}</td>
+                    <th width="30%">ftphost</th>
+                    <th width="30%">ftp主机IP</th>
+                    <td width="40%" id="ftphost">{{json_dict['ftphost']}}</td>
                 </tr>
                 <tr>         
-                    <th width="25%">ftpPwd</th>
-                    <td width="35%" id="ftpPwd">{{json_dict['ftpPwd']}}</td>
+                    <th width="30%">ftpPwd</th>
+                    <th width="30%">ftp密码</th>
+                    <td width="40%" id="ftpPwd">{{json_dict['ftpPwd']}}</td>
                 </tr>
                 <tr>         
-                    <th width="25%">ftpPort</th>
-                    <td width="35%" id="ftpPort">{{json_dict['ftpPort']}}</td>
+                    <th width="30%">ftpPort</th>
+                    <th width="30%">ftp端口</th>
+                    <td width="40%" id="ftpPort">{{json_dict['ftpPort']}}</td>
                 </tr>
                 <tr>         
-                    <th width="25%">serverIp</th>
-                    <td width="35%" id="serverIp">{{json_dict['serverIp']}}</td>
+                    <th width="30%">serverIp</th>
+                    <th width="30%">后台服务器IP</th>
+                    <td width="40%" id="serverIp">{{json_dict['serverIp']}}</td>
                 </tr>
             </tbody>
         </table>

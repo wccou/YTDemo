@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>应用数据流量分析</title>
+    <title>应用数据上报个数随时间变化</title>
 
     <link href="../../static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="../../static/bootstrap-3.3.5/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
@@ -103,7 +103,7 @@
 <div>
     <div class="container">
            
-        <form enctype="multipart/form-data" method="POST" action="{{url_for('appflowanalyzer')}}">
+        <form enctype="multipart/form-data" method="POST" action="{{url_for('app_time')}}">
 
                            <h4>请选择时间段:</h4>
                     <div class="controls">
@@ -121,13 +121,13 @@
     </div>  
 </div>
 <h4 align="center">当前选取时间为:{{time}}</h4>
-<div class="container" id="first" style="height:800px; width: 100%;float:left"></div>
+
+<div id="topo" style="height:600px;width:100%;float:left"></div>
 
 
 {% autoescape false %}
     <!-- ECharts单文件引入 -->
     <script src="../../static/echarts-2.27/build/dist/echarts.js" type="text/javascript"></script>
-
 
 <script type="text/javascript">
         // 路径配置
@@ -143,71 +143,128 @@
                 'echarts',
                 'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
                 'echarts/chart/line',// 使用柱状图就加载bar模块，按需加载
-                'echarts/chart/scatter' // 使用柱状图就加载bar模块，按需加载
             ],
             function (ec) {
                 // 基于准备好的dom，初始化echarts图表
-                var myChart = ec.init(document.getElementById('first'));
+                var myChart = ec.init(document.getElementById('topo'));
 
-                var  option = {
-                tooltip : {
-                    trigger: 'axis',
-                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                    }
-                },
-                title : {
-                    text: '应用数据每轮上报统计图',
-                    // subtext: '',
-                    x: 'center',
-                    y:'top'
-                },
-                    dataZoom: {
-                    show: true,
-                    start : 0,
-                    end   :70
-                },
-                legend: {
-                    data:['others', '-1 minute','0 minute','1 minute','2 minute','3 minute','4 minute'],
-                    x:'center',
-                    y:40,
-                    // orient : 'vertical'
+                var option  = {
+    title : {
+        text : '应用数据上报个数随时间变化情况',
+        // subtext : '',
+        x:'center',
+        y:'top'
+    },
+    tooltip : {
 
-                },
-                toolbox: {
-                    show : true,
-                    orient : 'vertical',
-                    x: 'left', 
-                    y: 'center',
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
-                        magicType : {show: true, type: ['line', 'bar', 'scatter']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
-                    }
-                },
-                calculable : false,
-                yAxis : [
+        trigger: 'item',
+        formatter : function (params) {
+            var date = params.value[0];
+            data = date.getFullYear() + '-'
+                   + (date.getMonth() + 1) + '-'
+                   + date.getDate() + ' '
+                   + date.getHours() + ':'
+                   + date.getMinutes()
+                   +':'+ date.getSeconds()
+                   ;
+            return data + '<br/>'+ params.value[1] 
+        }
+    },
+    toolbox: {
+        show : true,
+        orient : 'vertical',
+        x: 'left', 
+        y: 'center',
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            dataZoom : {show: true},
+            magicType : {show: true, type: [ 'bar','line']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+
+
+    dataZoom: {
+        show: true,
+        start : 0,
+        end:100
+    },
+    legend : {
+        x:'center',
+        y:45
+    },
+    grid: {
+        y2: 80
+    },
+    xAxis : [
+        {
+            type : 'time',
+            splitNumber:10
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value'
+        }
+    ],
+    series : [
+        {
+            name: 'number of topo message',
+            type: 'line',
+            showAllSymbol: true,
+            // symbol:'rectangle',
+            // symbolSize: function (value){
+            //     return Math.round(5);
+            // },
+            markPoint : {
+                data : [
+                    {type : 'max', name: '最大值'},
+                ]
+            },
+            legendHoverLink:true,
+            itemStyle : { 
+                normal: {
+                    label : 
                     {
-                        type : 'value'
+                     show: true,
+                     position: 'left',
+                      formatter : function (params) {
+                                 var date = params.value[0];
+                                     data = date.getMinutes()%10;
+                            return ''
+                            // '批次:'+data + '个数:'+ params.value[1] 
+                        }
                     }
-                ],
-                xAxis : [
-                    {
-                        type : 'category',
-                        data : {{timeline}}
-                    }
-                ],
-                series :{{templist}}
-                 
-            };
+                }},
+            data: (function () {
+                var d = [];
+                var Things= {{topo_traffic_key}};
+                var Values= {{topo_traffic_value}};
+                for (var i = Things.length - 1; i >= 0; i--) {
+                    d.push([
+                        new Date(Things[i]),
+                        Values[i]
+                    ]);
+                };
+                    
+                
+                return d;
+            })()
+        }
+    ]
+};
                     
                 // 为echarts对象加载数据
                 myChart.setOption(option);
             }
         );
     </script>
+
+
+ 
+
 
 
 

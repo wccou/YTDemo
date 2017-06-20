@@ -49,7 +49,7 @@ def data_error_new(time1,time2):
     #         }
     #     ]
     # }
-    idata = DATABASE.my_db_execute('select electric, NodeID, currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and electric>25;',(time1, time2))
+    idata = DATABASE.my_db_execute('select electric, NodeID, currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and electric>40;',(time1, time2))
     if idata:
         # print idata
         nodedict = dict()
@@ -61,7 +61,7 @@ def data_error_new(time1,time2):
                 warning_detail = dict()
                 evolution_dict_temp["time"] = str(i[2]).encode('ascii')
                 evolution_dict_temp["value"] = 50
-                warning_detail["text"] = i[1].encode('ascii')+":Current="+str(i[0])+"uA"
+                warning_detail["text"] = i[1].encode('ascii')+":Current="+str(round(i[0],2))+"uA"
                 warning_detail["link"] = "javascript:;"
                 evolution_dict_temp["detail"] = warning_detail
                 evolution_list = nodedict[i[1]]["evolution"]
@@ -75,7 +75,7 @@ def data_error_new(time1,time2):
                 evolution_list = list()
                 evolution_dict_temp["time"] = str(i[2]).encode('ascii')
                 evolution_dict_temp["value"] = 50
-                warning_detail["text"] = i[1].encode('ascii')+":Current="+str(i[1])+"uA"
+                warning_detail["text"] = i[1].encode('ascii')+":Current="+str(round(i[0],2))+"uA"
                 warning_detail["link"] = "javascript:;"
                 evolution_dict_temp["detail"] = warning_detail
                 evolution_list.append(evolution_dict_temp)

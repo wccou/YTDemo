@@ -345,32 +345,32 @@ def deploy_modify():
         elif flag==2:
             return "节点ID长度过长，请重新输入！(4位)"
         elif flag==3:
-            if ("0"+str(node)) in nodeid_set:
+            if ("0"+str(NodeID)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
                 DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("0"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==4:
-            if ("00"+str(node)) in nodeid_set:
+            if ("00"+str(NodeID)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
                 DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("00"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==5:
-            if ("000"+str(node)) in nodeid_set:
+            if ("000"+str(NodeID)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
                 DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("000"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==1:
-            if str(node) in nodeid_set:
+            if str(NodeID) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
-                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,NodeID,Place,str(MeterID),str(IP)))
+                DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str(NodeID),Place,str(MeterID),str(IP)))
             return "更改成功"
         else:
             DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
@@ -417,24 +417,24 @@ def deploy_add():
         Place = request.form["Place"]
         # print NodeID, MeterID, Place
         if len(NodeID) == 4:
-            if str(node) in nodeid_set:
+            if str(NodeID) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID,IP) VALUES (?,?,?,?);",(str(NodeID),Place,str(MeterID),str(IP)))
         elif len(NodeID) > 4:
             return "节点ID长度过长，请重新输入！(4位)"
         elif len(NodeID) == 3:
-            if ("0"+str(node)) in nodeid_set:
+            if ("0"+str(NodeID)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID,IP) VALUES (?,?,?,?);",("0"+str(NodeID),Place,str(MeterID),str(IP)))
         elif len(NodeID) == 2:
-            if ("00"+str(node)) in nodeid_set:
+            if ("00"+str(NodeID)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID,IP) VALUES (?,?,?,?);",("00"+str(NodeID),Place,str(MeterID),str(IP)))
         elif len(NodeID) == 1:
-            if ("000"+str(node)) in nodeid_set:
+            if ("000"+str(NodeID)) in nodeid_set:
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("insert into NodePlace (NodeID,Place,MeterID,IP) VALUES (?,?,?,?);",("000"+str(NodeID),Place,str(MeterID),str(IP)))
@@ -460,7 +460,7 @@ def node_search():
 
         return render_template('./dataanalyzer/node_search.html',
             nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
-            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12])
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
     else:
         nodepick    =  nodeid_list[0]
         end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
@@ -469,7 +469,7 @@ def node_search():
 
         return render_template('./dataanalyzer/node_search.html',
             nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
-            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12])
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
 
 #节点部署信息查询
 @app.route('/deploysearch/', methods=['POST', 'GET'])
@@ -491,7 +491,7 @@ def deploysearch():
         deploy = list()
         deploy.append(deploy_info[0][0].encode('ascii'))
         deploy.append(deploy_info[0][1].encode('ascii'))
-        deploy.append(deploy_info[0][2].encode('ascii'))
+        deploy.append(deploy_info[0][2])
 
         index_of_pick=nodeid_list.index(nodepick)
         temp=nodeid_list[index_of_pick]
@@ -1084,6 +1084,23 @@ def protoanalyzer():
         data = protodisplay(previous_time,current_time)
         return render_template('./dataanalyzer/protoanalyzer.html',num_of_nodes=data[0],postrate=data[1] ,post=data[2], thispostrate=data[3] , http_key=data[4], http_value=data[5] ,nodecount=len(data[4]),time=data[6])
 
+@app.route('/topo_time/', methods=['POST', 'GET'])
+def topo_time():
+    if PCAPS == None:
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        selectime  =  request.form['field_name']
+        start_time = selectime.encode("utf-8")[0:19]
+        end_time = selectime.encode("utf-8")[22:41]
+        data = flowdisplay(start_time,end_time)
+        return render_template('./dataanalyzer/topo_time.html', topo_traffic_key=data[2],topo_traffic_value=data[3],time=data[4])
+    else:
+        t = time.time()
+        current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
+        previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))
+        data = flowdisplay(previous_time,current_time)
+        return render_template('./dataanalyzer/topo_time.html', topo_traffic_key=data[2],topo_traffic_value=data[3],time=data[4])
 #流量分析
 @app.route('/flowanalyzer/', methods=['POST', 'GET'])
 def flowanalyzer():
@@ -1095,13 +1112,31 @@ def flowanalyzer():
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         data = flowdisplay(start_time,end_time)
-        return render_template('./dataanalyzer/trafficanalyzer.html', timeline=data[0],templist=data[1], topo_traffic_key=data[2],topo_traffic_value=data[3],time=data[4])
+        return render_template('./dataanalyzer/trafficanalyzer.html', timeline=data[0],templist=data[1],time=data[4])
     else:
         t = time.time()
         current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
         previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))
         data = flowdisplay(previous_time,current_time)
-        return render_template('./dataanalyzer/trafficanalyzer.html', timeline=data[0],templist=data[1], topo_traffic_key=data[2],topo_traffic_value=data[3],time=data[4])
+        return render_template('./dataanalyzer/trafficanalyzer.html', timeline=data[0],templist=data[1],time=data[4])
+
+@app.route('/app_time/', methods=['POST', 'GET'])
+def app_time():
+    if PCAPS == None:
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        selectime  =  request.form['field_name']
+        start_time = selectime.encode("utf-8")[0:19]
+        end_time = selectime.encode("utf-8")[22:41]
+        data = appflowdisplay(start_time,end_time)
+        return render_template('./dataanalyzer/app_time.html', topo_traffic_key=data[2],topo_traffic_value=data[3],time=data[4])
+    else:
+        t = time.time()
+        current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
+        previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))
+        data = appflowdisplay(previous_time,current_time)
+        return render_template('./dataanalyzer/app_time.html', topo_traffic_key=data[2],topo_traffic_value=data[3],time=data[4])
 
 @app.route('/appflowanalyzer/', methods=['POST', 'GET'])
 def appflowanalyzer():
@@ -1113,13 +1148,13 @@ def appflowanalyzer():
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         data = appflowdisplay(start_time,end_time)
-        return render_template('./dataanalyzer/appflowdisplay.html', timeline=data[0],templist=data[1], topo_traffic_key=data[2],topo_traffic_value=data[3],time=data[4])
+        return render_template('./dataanalyzer/appflowdisplay.html', timeline=data[0],templist=data[1],time=data[4])
     else:
         t = time.time()
         current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
         previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))
         data = appflowdisplay(previous_time,current_time)
-        return render_template('./dataanalyzer/appflowdisplay.html', timeline=data[0],templist=data[1], topo_traffic_key=data[2],topo_traffic_value=data[3],time=data[4])
+        return render_template('./dataanalyzer/appflowdisplay.html', timeline=data[0],templist=data[1],time=data[4])
 
 #上报数量分析
 @app.route('/count_appdata/', methods=['POST', 'GET'])
@@ -1133,7 +1168,7 @@ def count_appdata():
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         dataset = selectall(start_time,end_time,"ApplicationData")
-        return render_template('./dataanalyzer/count_appdata.html',nodelist=dataset[0], countlist=dataset[1],time=dataset[2])
+        return render_template('./dataanalyzer/count_appdata.html',nodelist=dataset[0], countlist=dataset[1],time=dataset[2],count=len(dataset[0]))
     else:
         t = time.time()
         current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))

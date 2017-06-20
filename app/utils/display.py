@@ -246,9 +246,11 @@ def nodesearch_display(time1,time2,node):
     time_list_1 = list()
     time_list_2 = list()
     time_list_3 = list()
+    time_list_4 = list()
     voltage_list = list()
     current_list = list()
     rtx_list = list()
+    beacon_list = list()
     nodeid_list = NetID_all()
     nodeid_list.sort()
     cpu ,lpm ,tx ,rx=[0,0,0,0]
@@ -258,7 +260,7 @@ def nodesearch_display(time1,time2,node):
         deploy = list()
         deploy.append(deploy_info[0][0].encode('ascii'))
         deploy.append(deploy_info[0][1].encode('ascii'))
-        deploy.append(deploy_info[0][2].encode('ascii'))
+        deploy.append(deploy_info[0][2])
     else:
         deploy = ["no data","no data","no data"]
     voltage = DATABASE.my_db_execute('select currenttime, volage from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
@@ -273,6 +275,10 @@ def nodesearch_display(time1,time2,node):
     for i in range(len(rtx)):
         time_list_3.append(rtx[i][0].encode('ascii'))
         rtx_list.append(rtx[i][1])
+    beacon = DATABASE.my_db_execute('select currenttime, beacon from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+    for i in range(len(beacon)):
+        time_list_4.append(beacon[i][0].encode('ascii'))
+        beacon_list.append(beacon[i][1])
 
     energycost = DATABASE.my_db_execute('select CPU,LPM,TX,RX from NetMonitor where NodeID==? order by ID desc LIMIT 1',(node,))
     cpu= round(float(energycost[0][0])/32768,2)
@@ -281,7 +287,7 @@ def nodesearch_display(time1,time2,node):
     rx = round(float(energycost[0][3])/32768,2)           
 
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
-    return nodeid_list,str(cpu),str(lpm),str(tx),str(rx),voltage_list,time_list_1,time_list_2,current_list,time_list_3,rtx_list,deploy,timedisplay
+    return nodeid_list,str(cpu),str(lpm),str(tx),str(rx),voltage_list,time_list_1,time_list_2,current_list,time_list_3,rtx_list,deploy,timedisplay,time_list_4,beacon_list
 
 
 def node_time_display(time1,time2,db,node):
@@ -338,11 +344,11 @@ def topo_display(time1,time2):
     else:
         timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
         return ([],[],timedisplay)
-    ID_list = DATABASE.my_db_execute("select distinct NodeID, ParentID from NetMonitor where currenttime >= ? and currenttime <= ?;",(start_time, end_time))
+    ID_list = DATABASE.my_db_execute("select NodeID, ParentID from NetMonitor where currenttime >= ? and currenttime <= ?;",(start_time, end_time))
     Parentnode = dict()
     for node in ID_list:
         ID = node[0] # ID
-        ParentID = node[1].lower() # parentID
+        ParentID = node[1].upper() # parentID
         if ID in Parentnode:
             continue
         else:
@@ -354,26 +360,26 @@ def topo_display(time1,time2):
     links = list()
     n = dict()
     m = dict()
-    # if rootID not in Parentnode.keys():
-    #     rootIDjson = {"category":0, "name":"root:"+str(rootID.encode('ascii'))}
-    #     nodes.append(rootIDjson)
-    #     for key ,value in Parentnode.items():
-    #         n = {"category":1, "name":key.encode('ascii')}
-    #         nodes.append(n)
-    #         m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
-    #         links.append(m)
-    # else:
-    for key ,value in Parentnode.items():
-        if key==rootID:
-            n = {"category":0, "name":key.encode('ascii')}
-            nodes.append(n)
-            m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
-            links.append(m)
-        else:
+    if rootID not in Parentnode.keys():
+        rootIDjson = {"category":0, "name":str(rootID.encode('ascii'))}
+        nodes.append(rootIDjson)
+        for key ,value in Parentnode.items():
             n = {"category":1, "name":key.encode('ascii')}
             nodes.append(n)
             m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
             links.append(m)
+    else:
+        for key ,value in Parentnode.items():
+            if key==rootID:
+                n = {"category":0, "name":key.encode('ascii')}
+                nodes.append(n)
+                m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
+                links.append(m)
+            else:
+                n = {"category":1, "name":key.encode('ascii')}
+                nodes.append(n)
+                m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
+                links.append(m)
     # links.append({"source":"0073","target":"0035","weight":1})
     # print len(links)
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
