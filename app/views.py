@@ -345,28 +345,28 @@ def deploy_modify():
         elif flag==2:
             return "节点ID长度过长，请重新输入！(4位)"
         elif flag==3:
-            if ("0"+str(NodeID)) in nodeid_set:
+            if ("0"+str(NodeID)) in nodeid_set and "0"+str(NodeID) != str(old_data[0][1]):
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
                 DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("0"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==4:
-            if ("00"+str(NodeID)) in nodeid_set:
+            if ("00"+str(NodeID)) in nodeid_set and "00"+str(NodeID) != str(old_data[0][1]):
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
                 DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("00"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==5:
-            if ("000"+str(NodeID)) in nodeid_set:
+            if ("000"+str(NodeID)) in nodeid_set and "000"+str(NodeID) != str(old_data[0][1]):
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
                 DATABASE.db_del_or_insert("insert into NodePlace (ID,NodeID,Place,MeterID,IP) VALUES (?,?,?,?,?);",(ID,str("000"+str(NodeID)),Place,str(MeterID),str(IP)))
             return "更改成功"
         elif flag==1:
-            if str(NodeID) in nodeid_set:
+            if str(NodeID) in nodeid_set and str(NodeID) != str(old_data[0][1]):
                 return "Error,节点已存在" #节点已存在
             else:
                 DATABASE.db_del_or_insert("delete from NodePlace where ID = ?;",(ID,))
@@ -625,10 +625,6 @@ def instruction_send():
 
         transmit_type = request.form['mySelect']
         nodeip = request.form.getlist('NodeIP')
-        if len(nodeip)>5:
-            nodeip=nodeip[0:5]
-        elif len(nodeip)==0:
-            transmit_type="mcast"
     if datalength:
         datalist.append(datalength)
     datalist.append(recvdata)
@@ -638,9 +634,9 @@ def instruction_send():
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
     else:
-        addrlist = []
-        addrlist.append(nodeip)
-        dicts["addrList"] = addrlist
+        # addrlist = []
+        # addrlist.append(nodeip)
+        dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     sendins.TCP_send(ins)
     # print ins
@@ -671,10 +667,7 @@ def instruction_write():
             recvdata = display.write_display() #旧数据
         transmit_type = request.form['mySelect2']
         nodeip = request.form.getlist('NodeIP2')
-        if len(nodeip)>5:
-            nodeip=nodeip[0:5]
-        elif len(nodeip)==0:
-            transmit_type="mcast"
+
     if datalength:
         datalist.append(datalength)
     datalist.append(recvdata)
@@ -684,9 +677,9 @@ def instruction_write():
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
     else:
-        addrlist = []
-        addrlist.append(nodeip)
-        dicts["addrList"] = addrlist
+        # addrlist = []
+        # addrlist.append(nodeip)
+        dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     # print ins
     sendins.TCP_send(ins)
@@ -701,17 +694,13 @@ def instruction_restart():
     if request.method == 'POST':
         transmit_type = request.form['mySelect4']
         nodeip = request.form.getlist('NodeIP4')
-        if len(nodeip)>5:
-            nodeip=nodeip[0:5]
-        elif len(nodeip)==0:
-            transmit_type="mcast"
     dicts["type"] = transmit_type
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
     else:
-        addrlist = []
-        addrlist.append(nodeip)
-        dicts["addrList"] = addrlist
+        # addrlist = []
+        # addrlist.append(nodeip)
+        dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     # print ins
     sendins.TCP_send(ins)
@@ -727,17 +716,13 @@ def instruction_reset():
     if request.method == 'POST':
         transmit_type = request.form['mySelect5']
         nodeip = request.form.getlist('NodeIP5')
-        if len(nodeip)>5:
-            nodeip=nodeip[0:5]
-        elif len(nodeip)==0:
-            transmit_type="mcast"
     dicts["type"] = transmit_type
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
     else:
-        addrlist = []
-        addrlist.append(nodeip)
-        dicts["addrList"] = addrlist
+        # addrlist = []
+        # addrlist.append(nodeip)
+        dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     
     sendins.TCP_send(ins)

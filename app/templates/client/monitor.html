@@ -103,7 +103,7 @@ function check5(object)
                     <ul>
                         <li><a href="#section-underline-1"><span>指令下发</span></a></li>
                         <li><a href="#section-underline-2"><span>指令烧写</span></a></li>
-                        <li><a href="#section-underline-3"><span>修改网络参数</span></a></li>
+                        <li><a href="#section-underline-3"><span style="color:#666666">修改网络参数(暂不可用)</span></a></li>
                         <li><a href="#section-underline-4"><span>节点重启</span></a></li>
                         <li><a href="#section-underline-5"><span>恢复出厂</span></a></li>
                         <li><a href="#section-underline-6"><span>设定根节点校时周期</span></a></li>
@@ -123,14 +123,16 @@ function check5(object)
                         </select>
                          <button type="submit" class="btn btn-success" style="height:40px; font-size:19px">指令下发</button>
                         <div id="ipselect" style="display: none">    
-                        <label>节点选择</label>
+                        <label>节点选择(最多选择5项)</label>
                         <form id="nodeIP" name="nodeIP" class="form-horizontal" role="form" onchange="check(this)">
-                            <div class="form-group">
-                                <select id="maxOption2" class="selectpicker show-menu-arrow form-control" multiple data-max-options="5">
+                            <div style="height:400px;width:500px;">
+                            <div class="col-lg-10">
+                                <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP">
                                 {% for item in IP_list: %}
                                     <option>{{item}}</option>
                                 {% endfor %}
                                 </select>
+                                </div>
                             </div>
                           </form>
                         <!-- <form id="nodeIP" name="nodeIP" onchange="check(this)">
@@ -143,8 +145,7 @@ function check5(object)
                         
                         </div>
                        </div>
-                       
-                        
+
 
                         </form>
                         <iframe id="iframe1" name="iframe1" style="display:none;"></iframe> 
@@ -163,14 +164,18 @@ function check5(object)
                     <button style="height:40px; font-size:19px" type="submit" class="btn btn-success" style="width:107px;height:48px;">指令烧写</button>
 
                         <div  id="ipselect2" style="display: none">    
-                        <label>节点选择:(最多选择5项，超过5项视为选中前5项,不选择节点默认多播)</label>
-                        <form id="nodeIP2" name="nodeIP2" onchange="check2(this)">
-                        {% for item in IP_list: %}
-                            <br> 
-                            <input name="NodeIP2" type="checkbox" value={{item}} />{{item}}
-
-                        {% endfor %}
-                        </form>
+                        <label>节点选择:(最多选择5项)</label>
+                        <form id="nodeIP2" name="nodeIP2" class="form-horizontal" role="form" onchange="check(this)">
+                            <div style="height:400px;width:500px;">
+                            <div class="col-lg-10">
+                                <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP2">
+                                {% for item in IP_list: %}
+                                    <option>{{item}}</option>
+                                {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+                          </form>
                         </div>
                         <br />
                       
@@ -250,14 +255,18 @@ function check5(object)
                      　<button style="height:40px; font-size:19px" type="submit" class="btn btn-success">重启指令下发
                      </button>
                         <div id="ipselect4" style="display: none"> 
-                        <label>节点选择:(最多选择5项，超过5项视为选中前5项,不选择节点默认多播)</label>
-                        <form id="nodeIP4" name="nodeIP4" onchange="check4(this)">
-                        {% for item in IP_list: %}
-                            <br> 
-                            <input name="NodeIP4" type="checkbox" value={{item}} />{{item}}
-
-                        {% endfor %}
-                        </form>  
+                        <label>节点选择:(最多选择5项)</label>
+                        <form id="nodeIP4" name="nodeIP4" class="form-horizontal" role="form" onchange="check(this)">
+                            <div style="height:400px;width:500px;">
+                            <div class="col-lg-10">
+                                <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP4">
+                                {% for item in IP_list: %}
+                                    <option>{{item}}</option>
+                                {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+                          </form>
                         </div>
                  　
                         
@@ -281,14 +290,18 @@ function check5(object)
                         <button style="height:40px; font-size:19px" type="button" class="btn btn-success" onclick="del()" 　>恢复出厂设置</button>
 
                         <div id="ipselect5" style="display: none">    
-                        <label>节点选择:(最多选择5项，超过5项视为选中前5项,不选择节点默认多播)</label>
-                        <form id="nodeIP5" name="nodeIP5" onchange="check5(this)">
-                        {% for item in IP_list: %}
-                            <br> 
-                            <input name="NodeIP5" type="checkbox" value={{item}} />{{item}}
-
-                        {% endfor %}
-                        </form>  
+                        <label>节点选择:(最多选择5项)</label>
+                        <form id="nodeIP5" name="nodeIP5" class="form-horizontal" role="form" onchange="check(this)">
+                            <div style="height:400px;width:500px;">
+                            <div class="col-lg-10">
+                                <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP5">
+                                {% for item in IP_list: %}
+                                    <option>{{item}}</option>
+                                {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+                          </form>
                         </select>
                         </div>
                      
