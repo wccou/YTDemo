@@ -196,7 +196,7 @@ def flowdisplay(time1,time2):
         sum_value = sum_value+value
         traffic_value_list.append(sum_value)
     lists=topo_traffic_analyzer(topodata_list)
-    templist=[lists[1],lists[2],lists[3],lists[4],lists[5],lists[6],lists[7]]
+    templist=[lists[1],lists[2],lists[3],lists[4],lists[5],lists[6],lists[7],lists[8],lists[9]]
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     return lists[0],templist,traffic_key_list,traffic_value_list,timedisplay
 
@@ -211,7 +211,7 @@ def appflowdisplay(time1,time2):
         sum_value = sum_value+value
         traffic_value_list.append(sum_value)
     lists=app_traffic_analyzer(appdata_list)
-    templist=[lists[1],lists[2],lists[3],lists[4],lists[5],lists[6],lists[7]]
+    templist=[lists[1],lists[2],lists[3],lists[4],lists[5],lists[6],lists[7],lists[8],lists[9]]
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     return lists[0],templist,traffic_key_list,traffic_value_list,timedisplay
 

@@ -50,10 +50,14 @@ def topo_traffic_analyzer(TOPODICT):
                     traffic_dict[tempkey][5]+=1
                 elif real_base_diff==4:
                     traffic_dict[tempkey][6]+=1
+                elif real_base_diff==5:
+                    traffic_dict[tempkey][7]+=1
+                elif real_base_diff==6:
+                    traffic_dict[tempkey][8]+=1
                 else:
                     traffic_dict[tempkey][0]+=1
             else:
-                traffic_dict[tempkey]=[0,0,0,0,0,0,0]
+                traffic_dict[tempkey]=[0,0,0,0,0,0,0,0,0]
                 if real_base_diff==-1 :
                     traffic_dict[tempkey][1]+=1
                 elif real_base_diff==0:
@@ -66,13 +70,17 @@ def topo_traffic_analyzer(TOPODICT):
                     traffic_dict[tempkey][5]+=1
                 elif real_base_diff==4:
                     traffic_dict[tempkey][6]+=1
+                elif real_base_diff==5:
+                    traffic_dict[tempkey][7]+=1
+                elif real_base_diff==6:
+                    traffic_dict[tempkey][8]+=1
                 else:
                     traffic_dict[tempkey][0]+=1
     return get_traffic_list(traffic_dict)
 
 def get_traffic_list(traffic_dict):
     resultdict=[]
-    templist=[[],[],[],[],[],[],[],[]]
+    templist=[[],[],[],[],[],[],[],[],[],[]]
     for key ,value in traffic_dict.items():
         templist[0].append(key)
         templist[1].append(value[0])
@@ -82,6 +90,8 @@ def get_traffic_list(traffic_dict):
         templist[5].append(value[4])
         templist[6].append(value[5])
         templist[7].append(value[6])
+        templist[8].append(value[7])
+        templist[9].append(value[8])
     # print templist[1]
     tempdict1 ={
     'name':'others',
@@ -92,7 +102,7 @@ def get_traffic_list(traffic_dict):
     }
     resultdict.append(templist[0])
     resultdict.append(tempdict1)
-    for x in xrange(2,8):
+    for x in xrange(2,10):
         tempdict2 ={
         'name':str(x-3)+' minute',
         'type':'bar',
@@ -154,10 +164,14 @@ def app_traffic_analyzer(TOPODICT):
                     traffic_dict[tempkey][5]+=1
                 elif real_base_diff==4:
                     traffic_dict[tempkey][6]+=1
+                elif real_base_diff==5:
+                    traffic_dict[tempkey][7]+=1
+                elif real_base_diff==6:
+                    traffic_dict[tempkey][8]+=1
                 else:
                     traffic_dict[tempkey][0]+=1
             else:
-                traffic_dict[tempkey]=[0,0,0,0,0,0,0]
+                traffic_dict[tempkey]=[0,0,0,0,0,0,0,0,0]
                 if real_base_diff==-1 :
                     traffic_dict[tempkey][1]+=1
                 elif real_base_diff==0:
@@ -170,6 +184,10 @@ def app_traffic_analyzer(TOPODICT):
                     traffic_dict[tempkey][5]+=1
                 elif real_base_diff==4:
                     traffic_dict[tempkey][6]+=1
+                elif real_base_diff==5:
+                    traffic_dict[tempkey][7]+=1
+                elif real_base_diff==6:
+                    traffic_dict[tempkey][8]+=1
                 else:
                     traffic_dict[tempkey][0]+=1
     return get_traffic_list(traffic_dict)
