@@ -237,6 +237,8 @@ def protodisplay(time1,time2):
         allposts = DATABASE.my_db_execute("select count(*) from NetMonitor where currenttime >= ? and currenttime <= ?;",(time1, time2))[0][0]
         if num_of_nodes:
             postrate = round((float(allposts)/(rounds * num_of_nodes)), 4) * 100
+        else:
+            postrate = "?"
     else:
         postrate = "?"
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
