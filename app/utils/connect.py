@@ -4,11 +4,11 @@ import socket
 import json
 import os
 from app import app
+#登录控制
 class loginjudge:
 	def __init__(self):
-		self.Config_FILE = os.path.join(app.config['CONFIG_FOLDER'],"login")
+		self.Config_FILE = 'login.txt'
 		f=open(self.Config_FILE,'r')
-		content = f.readline()
 		f.close()
 	def turntrue(self):
 		with open(self.Config_FILE, 'w') as f:
@@ -18,13 +18,13 @@ class loginjudge:
 		with open(self.Config_FILE, 'w') as f:
 			f.write("False")
 			f.close()
-			
+
 	def getPCAPS(self):
 		with open(self.Config_FILE, 'r') as f:
 			return f.readline()
 
 
-
+#首页信息展示
 class Connect:
 	def __init__(self):
 		self.Config_FILE = os.path.join(app.config['CONFIG_FOLDER'],"config.json")

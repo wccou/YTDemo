@@ -1046,6 +1046,8 @@ def login():
     if request.method == 'GET':
         return render_template('./login/login.html')
     elif request.method == 'POST':
+        # print login_msg.username.data
+        # print login_msg.password.data
         USERNAME = hashlib.sha256(login_msg.username.data).hexdigest()
         PASSWRD  = hashlib.sha256(login_msg.password.data).hexdigest()
         if USERNAME==HIT_USER and PASSWRD==HIT_PWD:
