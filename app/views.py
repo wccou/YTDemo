@@ -8,7 +8,7 @@ from forms import Upload, ProtoFilter,User_and_pwd
 from utils.gxn_topo_handler import getfile_content,getall_topo,showdata_from_id,topo_filter
 from utils.gxn_topo_decode  import TopoDecode
 from utils.gxn_get_sys_config import Config
-from utils.connect import Connect
+from utils.connect import Connect,loginjudge
 from utils.db_operate import DBClass
 from utils.display import multipledisplay,singledisplay,NetID_list,NetID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,appflowdisplay,restart_display
 from utils.error import data_error_new,syn_error
@@ -24,21 +24,16 @@ from time import strftime
 import socket
 import json
 import math
+import hashlib
 
 #导入函数到模板中
 app.jinja_env.globals['enumerate'] = enumerate
 
-#全局变量
-PCAP_NAME = ''     #上传文件名
-# PD = PcapDecode() #解析器
-PDF_NAME = ''
 
 # ---------------------------------------------------------------------------
-PCAPS = 'yeslogin' #login
-# PCAPS = None #login
-
-HIT_USER ='root'#用户名
-HIT_PWD  ='xiaoming'  #默认密码
+# PCAPS = 'yeslogin' #login
+HIT_USER = '4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2'
+HIT_PWD =  'f95dd02f6b3091391e83b53fc0303509bf6178973e4a7a7cebbbf2892e83acaa'
 TOPODATA   = None #login
 REALDATA   = None #login
 DATABASE   =DBClass()
@@ -55,7 +50,8 @@ COUNTER=0
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/index/', methods=['POST', 'GET'])
 def index():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         return redirect(url_for('login'))
     else:
         return render_template('./home/index.html')
@@ -66,8 +62,9 @@ def index():
 @app.route('/upload/', methods=['POST', 'GET'])
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
-    if PCAPS==None:
-        redirect(url_for('login'))
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
+        return redirect(url_for('login'))
     else:
         json_dict = dict()
         configfile = Connect()
@@ -122,7 +119,8 @@ def upload_modify():
 @app.route('/rtmetricdisplay/', methods=['POST', 'GET'])
 @app.route('/rtmetricdisplay', methods=['POST', 'GET'])
 def rtmetricdisplay():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -144,7 +142,8 @@ def rtmetricdisplay():
 @app.route('/currentdisplay/', methods=['POST', 'GET'])
 @app.route('/currentdisplay', methods=['POST', 'GET'])
 def currentdisplay():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -164,14 +163,18 @@ def currentdisplay():
 @app.route('/syntime/', methods=['POST', 'GET'])
 @app.route('/syntime', methods=['POST', 'GET'])
 def syntime():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
+        # time1 = datetime.datetime.now()
         selectime  =  request.form['field_name']
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         syntimedata_list = multipledisplay(start_time,end_time,"syntime")
+        # time2 = datetime.datetime.now()
+        # print time2-time1
         return render_template('./dataanalyzer/syntime.html',syntimedata_list=syntimedata_list[0],time=syntimedata_list[1])
     else:
         t = time.time()
@@ -185,7 +188,8 @@ def syntime():
 @app.route('/energydisplay/', methods=['POST', 'GET'])
 @app.route('/energydisplay', methods=['POST', 'GET'])
 def energydisplay():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -207,7 +211,8 @@ def energydisplay():
 @app.route('/voltagedisplay/', methods=['POST', 'GET'])
 @app.route('/voltagedisplay', methods=['POST', 'GET'])
 def voltagedisplay():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -227,7 +232,8 @@ def voltagedisplay():
 @app.route('/restartdisplay/', methods=['POST', 'GET'])
 @app.route('/restartdisplay', methods=['POST', 'GET'])
 def restartdisplay():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -249,7 +255,8 @@ def restartdisplay():
 @app.route('/nbdisplay/', methods=['POST', 'GET'])
 @app.route('/nbdisplay', methods=['POST', 'GET'])
 def nbdisplay():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -268,7 +275,8 @@ def nbdisplay():
 @app.route('/beacondisplay/', methods=['POST', 'GET'])
 @app.route('/beacondisplay', methods=['POST', 'GET'])
 def beacondisplay():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -288,7 +296,8 @@ def beacondisplay():
 @app.route('/deploy_info/', methods=['POST', 'GET'])
 @app.route('/deploy_info', methods=['POST', 'GET'])
 def deploy_info():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -448,7 +457,8 @@ def deploy_add():
 def node_search():
     nodeid_list = NetID_all()
     nodeid_list.sort()
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -480,8 +490,8 @@ def deploysearch():
     for i in range(len(nodeid)):
         nodeid_list.append(nodeid[i][0].encode('ascii'))
     nodeid_list.sort()
-
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -509,7 +519,8 @@ def deploysearch():
 @app.route('/network_data/', methods=['POST', 'GET'])
 @app.route('/network_data', methods=['POST', 'GET'])
 def network_data():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -543,7 +554,8 @@ def network_data():
 @app.route('/app_data/', methods=['POST', 'GET'])
 @app.route('/app_data', methods=['POST', 'GET'])
 def app_data():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -582,7 +594,8 @@ def app_data():
 @app.route('/monitor/', methods=['POST', 'GET'])
 @app.route('/monitor', methods=['POST', 'GET'])
 def monitor():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -946,7 +959,8 @@ def update_schedule():
 @app.route('/sendmonitor/', methods=['POST', 'GET'])
 @app.route('/sendmonitor', methods=['POST', 'GET'])
 def sendmonitor():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1026,15 +1040,17 @@ def post_config():
 #--------------------------------------------认证登陆---------------------------------------------------
 @app.route('/login/',methods=['POST', 'GET'])
 def login():
+    global HIT_USER,HIT_PWD
+    LOGIN = loginjudge()
     login_msg=User_and_pwd()
     if request.method == 'GET':
         return render_template('./login/login.html')
     elif request.method == 'POST':
-        USERNAME = login_msg.username.data
-        PASSWRD  = login_msg.password.data
+        USERNAME = hashlib.sha256(login_msg.username.data).hexdigest()
+        PASSWRD  = hashlib.sha256(login_msg.password.data).hexdigest()
         if USERNAME==HIT_USER and PASSWRD==HIT_PWD:
-            global PCAPS 
-            PCAPS= 'yes:'
+            LOGIN.turntrue()
+            # print PCAPS
             return render_template('./home/index.html')
         else:
             flash(u"用户名或密码错误!")
@@ -1042,8 +1058,8 @@ def login():
 
 @app.route('/logout/',methods=['POST', 'GET'])
 def logout():
-    global PCAPS
-    PCAPS = None
+    LOGIN = loginjudge()
+    LOGIN.turnfalse()
     return redirect(url_for('login'))
 
 
@@ -1053,7 +1069,8 @@ def logout():
 #协议分析
 @app.route('/protoanalyzer/', methods=['POST', 'GET'])
 def protoanalyzer():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1071,7 +1088,8 @@ def protoanalyzer():
 
 @app.route('/topo_time/', methods=['POST', 'GET'])
 def topo_time():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1089,7 +1107,8 @@ def topo_time():
 #流量分析
 @app.route('/flowanalyzer/', methods=['POST', 'GET'])
 def flowanalyzer():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1107,7 +1126,8 @@ def flowanalyzer():
 
 @app.route('/app_time/', methods=['POST', 'GET'])
 def app_time():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1125,7 +1145,8 @@ def app_time():
 
 @app.route('/appflowanalyzer/', methods=['POST', 'GET'])
 def appflowanalyzer():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1145,7 +1166,8 @@ def appflowanalyzer():
 @app.route('/count_appdata/', methods=['POST', 'GET'])
 def count_appdata():
     databasepath = os.path.join(app.config['TOPO_FOLDER'],"topo3.db")
-    if PCAPS == None:
+    iLOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1165,7 +1187,8 @@ def count_appdata():
 @app.route('/appdataanalyzer/', methods=['POST', 'GET'])
 def appdataanalyzer():
     nodeid_list = AppID_all()
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1202,7 +1225,8 @@ def netcountdisplay():
     appdata = DATABASE.my_db_execute('select distinct NodeID from NetMonitor;',None)
     for i in range(len(appdata)):
         nodeid_list.append(appdata[i][0].encode('ascii'))
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1229,8 +1253,8 @@ def syntimediffdisplay():
     time_list = list()
     nodeid_list = NetID_all()
     nodeid_list.sort()
-
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1264,7 +1288,8 @@ def syntimediffdisplay():
 # 拓扑展示
 @app.route('/topodisplay/', methods=['POST', 'GET'])
 def topodisplay():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1329,7 +1354,8 @@ def topodisplay():
 
 @app.route('/terminaltool/', methods=['POST', 'GET'])
 def terminaltool():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1344,7 +1370,8 @@ def terminaltool():
 #异常数据
 @app.route('/exceptinfo/', methods=['POST', 'GET'])
 def exceptinfo():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1364,7 +1391,8 @@ def exceptinfo():
 #时间同步节点异常列表
 @app.route('/synerror/', methods=['POST', 'GET'])
 def synerror():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     elif request.method == 'POST':
@@ -1388,7 +1416,8 @@ def synerror():
 #进程监管
 @app.route('/supervisor/', methods=['POST', 'GET'])
 def supervisor():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1397,7 +1426,8 @@ def supervisor():
 
 @app.route('/supervisor_set_status/', methods=['POST', 'GET'])
 def supervisor_set_status():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1416,7 +1446,8 @@ def supervisor_set_status():
 
 @app.route('/supervisor_restart_all/', methods=['POST', 'GET'])
 def supervisor_restart_all():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1427,7 +1458,8 @@ def supervisor_restart_all():
 
 @app.route('/supervisor_start_all/', methods=['POST', 'GET'])
 def supervisor_start_all():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1437,7 +1469,8 @@ def supervisor_start_all():
 
 @app.route('/supervisor_stop_all/', methods=['POST', 'GET'])
 def supervisor_stop_all():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1447,7 +1480,8 @@ def supervisor_stop_all():
 
 @app.route('/tailflogback/', methods=['POST', 'GET'])
 def tailflogback():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1458,7 +1492,8 @@ def tailflogback():
 
 @app.route('/tailflogtunslip/', methods=['POST', 'GET'])
 def tailflogtunslip():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:
@@ -1471,9 +1506,6 @@ def tailflogtunslip():
 @app.route('/test/', methods=['POST', 'GET'])
 def test():
     return  render_template('./upload/timestamp.html')
-
-# ----------------------------------------------数据包构造页面---------------------------------------------
-#协议说明
 @app.route('/nettools/', methods=['POST', 'GET'])
 def nettools():
     return u'网络工具'
@@ -1481,7 +1513,6 @@ def nettools():
 @app.route('/protohelp/', methods=['POST', 'GET'])
 def protohelp():
     return u'协议说明'
-
 # ----------------------------------------------错误处理页面---------------------------------------------
 @app.errorhandler(404)
 def internal_error(error):
@@ -1493,7 +1524,8 @@ def internal_error(error):
 
 @app.route('/about/', methods=['POST', 'GET'])
 def about():
-    if PCAPS == None:
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
     else:

@@ -4,6 +4,26 @@ import socket
 import json
 import os
 from app import app
+class loginjudge:
+	def __init__(self):
+		self.Config_FILE = os.path.join(app.config['CONFIG_FOLDER'],"login")
+		f=open(self.Config_FILE,'r')
+		content = f.readline()
+		f.close()
+	def turntrue(self):
+		with open(self.Config_FILE, 'w') as f:
+			f.write("True")
+			f.close()
+	def turnfalse(self):
+		with open(self.Config_FILE, 'w') as f:
+			f.write("False")
+			f.close()
+			
+	def getPCAPS(self):
+		with open(self.Config_FILE, 'r') as f:
+			return f.readline()
+
+
 
 class Connect:
 	def __init__(self):
@@ -11,6 +31,8 @@ class Connect:
 		f=open(self.Config_FILE,'r')
 		self.CONFIG_DICT =json.load(f)
 		f.close()
+	
+
 
 	def TCP_send(self, ins):
 		serverip = self.CONFIG_DICT['serverIp']
@@ -54,8 +76,4 @@ class Connect:
 		f=open(self.Config_FILE,'r')
 		self.CONFIG_DICT =json.load(f)
 		f.close()
-
-
-
-
 

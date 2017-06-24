@@ -123,9 +123,9 @@ function check5(object)
                         </select>
                          <button type="submit" class="btn btn-success" style="height:40px; font-size:19px">指令下发</button>
                         <div id="ipselect" style="display: none">    
-                        <label>节点选择(最多选择5项)</label>
-                        <form id="nodeIP" name="nodeIP" class="form-horizontal" role="form" onchange="check(this)">
-                            <div style="height:400px;width:500px;">
+<!--                         <label>节点选择(最多选择5项)</label> -->
+                        <form id="nodeIP" name="nodeIP" class="form-horizontal" role="form" onchange="check(this)" >
+                            <div style="height:400px;width:300px; margin:0 auto;">
                             <div class="col-lg-10">
                                 <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP">
                                 {% for item in IP_list: %}
@@ -166,7 +166,7 @@ function check5(object)
                         <div  id="ipselect2" style="display: none">    
                         <label>节点选择:(最多选择5项)</label>
                         <form id="nodeIP2" name="nodeIP2" class="form-horizontal" role="form" onchange="check(this)">
-                            <div style="height:400px;width:500px;">
+                            <div style="height:400px;width:300px; margin:0 auto;">
                             <div class="col-lg-10">
                                 <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP2">
                                 {% for item in IP_list: %}
@@ -257,7 +257,7 @@ function check5(object)
                         <div id="ipselect4" style="display: none"> 
                         <label>节点选择:(最多选择5项)</label>
                         <form id="nodeIP4" name="nodeIP4" class="form-horizontal" role="form" onchange="check(this)">
-                            <div style="height:400px;width:500px;">
+                            <div style="height:400px;width:300px; margin:0 auto;">
                             <div class="col-lg-10">
                                 <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP4">
                                 {% for item in IP_list: %}
@@ -292,7 +292,7 @@ function check5(object)
                         <div id="ipselect5" style="display: none">    
                         <label>节点选择:(最多选择5项)</label>
                         <form id="nodeIP5" name="nodeIP5" class="form-horizontal" role="form" onchange="check(this)">
-                            <div style="height:400px;width:500px;">
+                            <div style="height:400px;width:300px; margin:0 auto;">
                             <div class="col-lg-10">
                                 <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP5">
                                 {% for item in IP_list: %}
