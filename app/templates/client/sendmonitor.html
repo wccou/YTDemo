@@ -29,6 +29,9 @@
     $(function(){
 //按钮单击时执行
     $("#getmonitor").click(function(){
+            $.ajax({
+            type:"get",
+            url:"{{url_for('post_monitor_data')}}"});
         var timeTicket;
         clearInterval(timeTicket);
         timeTicket = setInterval(function (){
@@ -80,7 +83,7 @@
                         <tr>
 
                             <td>
-                                <form name="post_monitor_data" target="iframe1" method="GET" action='{{url_for('post_monitor_data')}}'>
+                                <form name="post_monitor_data" target="iframe1" method="GET" action='{{url_for("post_monitor_data")}}'>
                                 <legend>获取网络监测数据:</legend>
                                     <!-- Progress bar -->
                                     <div id="progress_bar" class="ui-progress-bar ui-container">

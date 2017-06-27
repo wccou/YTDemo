@@ -1015,7 +1015,7 @@ def post_monitor_data():
 
     sendins = Connect()
     dicts = {}
-
+    # print nodes
     if request.method == 'GET':   
         for node in nodes:
             NODE_SET.add(str(node[0]))

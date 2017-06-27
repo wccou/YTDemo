@@ -34,7 +34,8 @@ def data_error_new(time1,time2):
     warning_list_i = list()    
     vnodeset = set()
     inodeset = set()
-
+    inode_dict = dict()
+    vnode_dict = dict()
     # {
     #     "name": "阿里巴巴上市", 
     #     "evolution": [
@@ -51,28 +52,21 @@ def data_error_new(time1,time2):
     # }
     idata = DATABASE.my_db_execute('select electric, NodeID, currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and electric>40;',(time1, time2))
     if idata:
-        # print idata
-        nodedict = dict()
         for i in idata:
-            warning_dict_temp = dict()
-            # warning_dict_i = dict()
-            if i[1] in nodedict:
-                evolution_dict_temp = dict()
-                warning_detail = dict()
+            evolution_dict_temp = dict()
+            warning_detail = dict()
+            if i[1].encode('ascii') in inodeset:                
                 evolution_dict_temp["time"] = str(i[2]).encode('ascii')
                 evolution_dict_temp["value"] = 50
                 warning_detail["text"] = i[1].encode('ascii')+":Current="+str(round(i[0],2))+"uA"
                 warning_detail["link"] = "javascript:;"
                 evolution_dict_temp["detail"] = warning_detail
-                evolution_list = nodedict[i[1]]["evolution"]
-                evolution_list.append(evolution_dict_temp)
-                warning_dict_temp["name"] = i[1].encode('ascii')
-                warning_dict_temp["evolution"] = evolution_list
+                inode_dict[i[1]]["evolution"].append(evolution_dict_temp)
             else:
-                inodeset.add(i[1])
-                evolution_dict_temp = dict()
-                warning_detail = dict()
+                warning_dict_temp = dict()
                 evolution_list = list()
+                inode_dict[str(i[1].encode('ascii'))]=dict()
+                inodeset.add(str(i[1].encode('ascii')))
                 evolution_dict_temp["time"] = str(i[2]).encode('ascii')
                 evolution_dict_temp["value"] = 50
                 warning_detail["text"] = i[1].encode('ascii')+":Current="+str(round(i[0],2))+"uA"
@@ -81,10 +75,10 @@ def data_error_new(time1,time2):
                 evolution_list.append(evolution_dict_temp)
                 warning_dict_temp["name"] = i[1].encode('ascii') #NodeID
                 warning_dict_temp["evolution"] = evolution_list
-                nodedict[i[1]]=warning_dict_temp
-            warning_list_i.append(warning_dict_temp)
-        # print warning_list_i
-        # print nodedict
+                inode_dict[i[1]]=warning_dict_temp
+
+        for key,value in inode_dict.items():
+            warning_list_i.append(value)
     else:
         warning_dict_i = dict()
         warning_dict_temp = dict()
@@ -102,37 +96,33 @@ def data_error_new(time1,time2):
     
     vdata = DATABASE.my_db_execute('select volage, NodeID, currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and volage<3;',(time1, time2))
     if vdata:
-        nodedict = dict()
-        for v in vdata:            
-            warning_dict_temp = dict()
-            # warning_dict_i = dict()
-            if v[1] in nodedict:
-                evolution_dict_temp = dict()
-                warning_detail = dict()
+        for v in vdata:
+            evolution_dict_temp = dict()
+            warning_detail = dict()
+            if v[1].encode('ascii') in vnodeset:                
                 evolution_dict_temp["time"] = str(v[2]).encode('ascii')
                 evolution_dict_temp["value"] = 50
-                warning_detail["text"] = v[1].encode('ascii')+":Voltage="+str(v[0])+"V"
+                warning_detail["text"] = v[1].encode('ascii')+":Voltage="+str(round(v[0],2))+"V"
                 warning_detail["link"] = "javascript:;"
                 evolution_dict_temp["detail"] = warning_detail
-                evolution_list = nodedict[v[1]]["evolution"]
-                evolution_list.append(evolution_dict_temp)
-                warning_dict_temp["name"] = v[1].encode('ascii')
-                warning_dict_temp["evolution"] = evolution_list
+                inode_dict[v[1]]["evolution"].append(evolution_dict_temp)
             else:
-                vnodeset.add(i[1])
-                evolution_dict_temp = dict()
-                warning_detail = dict()
+                warning_dict_temp = dict()
                 evolution_list = list()
+                inode_dict[str(v[1].encode('ascii'))]=dict()
+                inodeset.add(str(v[1].encode('ascii')))
                 evolution_dict_temp["time"] = str(v[2]).encode('ascii')
                 evolution_dict_temp["value"] = 50
-                warning_detail["text"] = v[1].encode('ascii')+":Voltage="+str(v[0])+"V"
+                warning_detail["text"] = v[1].encode('ascii')+":Voltage="+str(round(v[0],2))+"V"
                 warning_detail["link"] = "javascript:;"
                 evolution_dict_temp["detail"] = warning_detail
                 evolution_list.append(evolution_dict_temp)
                 warning_dict_temp["name"] = v[1].encode('ascii') #NodeID
                 warning_dict_temp["evolution"] = evolution_list
-                nodedict[v[1]]=warning_dict_temp
-        warning_list_v.append(warning_dict_temp)
+                vnode_dict[v[1]]=warning_dict_temp
+
+        for key,value in vnode_dict.items():
+            warning_list_v.append(value)
     else:
         warning_dict_v = dict()
         warning_dict_temp = dict()
