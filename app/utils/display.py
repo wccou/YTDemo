@@ -283,11 +283,16 @@ def nodesearch_display(time1,time2,node):
         beacon_list.append(beacon[i][1])
 
     energycost = DATABASE.my_db_execute('select CPU,LPM,TX,RX from NetMonitor where NodeID==? order by ID desc LIMIT 1',(node,))
-    cpu= round(float(energycost[0][0])/32768,2)
-    lpm= round(float(energycost[0][1])/32768,2)
-    tx = round(float(energycost[0][2])/32768,2)
-    rx = round(float(energycost[0][3])/32768,2)           
-
+    if energycost:
+        cpu= round(float(energycost[0][0])/32768,2)
+        lpm= round(float(energycost[0][1])/32768,2)
+        tx = round(float(energycost[0][2])/32768,2)
+        rx = round(float(energycost[0][3])/32768,2)   
+    else:
+        cpu = 0
+        lpm = 0
+        tx = 0
+        rx = 0        
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     return nodeid_list,str(cpu),str(lpm),str(tx),str(rx),voltage_list,time_list_1,time_list_2,current_list,time_list_3,rtx_list,deploy,timedisplay,time_list_4,beacon_list
 
@@ -301,7 +306,10 @@ def node_time_display(time1,time2,db,node):
         count += 1
         timelist.append([time_ms,count])
     dicts = dict()
-    dicts["name"] = node.encode('ascii')
+    if node:
+        dicts["name"] = node.encode('ascii')
+    else:
+        dicts["name"] = None
     dicts["data"] = timelist
     lists = list()
     lists.append(dicts)

@@ -472,10 +472,16 @@ def node_search():
             nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
             voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
     else:
-        nodepick    =  nodeid_list[0]
-        end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-        start_time  = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
-        data = nodesearch_display(start_time,end_time,nodepick)
+        if nodeid_list: 
+            nodepick    =  nodeid_list[0]
+            end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time  = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+        else:
+            nodepick = None
+            end_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
 
         return render_template('./dataanalyzer/node_search.html',
             nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
@@ -1218,7 +1224,7 @@ def appdataanalyzer():
 	if len(node)>0:
         	nodeid = (node[0][0].encode('ascii'))
 	else:
-		nodeid="xx"
+		nodeid=None
         t = time.time()
         current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
         previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))   
@@ -1245,7 +1251,10 @@ def netcountdisplay():
         return render_template('./dataanalyzer/netcountdisplay.html',timelist=timelist[0], nodelist = nodeid_list,time=timelist[1],node=nodepick)
     else:
         node = DATABASE.my_db_execute('select distinct NodeID from NetMonitor limit 1;',None)
-        nodeid = (node[0][0].encode('ascii'))
+        if node:
+            nodeid = (node[0][0].encode('ascii'))
+        else:
+            nodeid = None
         t = time.time()
         current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
         previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))   
@@ -1278,7 +1287,10 @@ def syntimediffdisplay():
         return render_template('./dataanalyzer/syntimediffdisplay.html',
             nodeid=nodepick,nodelist = nodeid_list,time_list=time_list,syntime_list=syntime_list,time=timedisplay)
     else:
-        nodepick    =  nodeid_list[0]
+        if nodeid_list:
+            nodepick    =  nodeid_list[0]
+        else:
+            nodepick = None
         end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
         start_time  = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
 
