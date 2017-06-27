@@ -357,7 +357,7 @@ def topo_display(time1,time2):
     ID_list = DATABASE.my_db_execute("select NodeID, ParentID from NetMonitor where currenttime >= ? and currenttime <= ?;",(start_time, end_time))
     Parentnode = dict()
     for node in ID_list:
-        ID = node[0] # ID
+        ID = node[0].upper() # ID
         ParentID = node[1].upper() # parentID
         if ID in Parentnode:
             continue
@@ -370,27 +370,32 @@ def topo_display(time1,time2):
     links = list()
     n = dict()
     m = dict()
+    all_nodes = set()
     if rootID not in Parentnode.keys():
         rootIDjson = {"category":0, "name":str(rootID.encode('ascii'))}
         nodes.append(rootIDjson)
         for key ,value in Parentnode.items():
-            n = {"category":1, "name":key.encode('ascii')}
-            nodes.append(n)
+            all_nodes.add(key.encode('ascii'))
+            all_nodes.add(value.encode('ascii'))
             m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
             links.append(m)
     else:
         for key ,value in Parentnode.items():
             if key==rootID:
-                n = {"category":0, "name":key.encode('ascii')}
-                nodes.append(n)
+                all_nodes.add(key.encode('ascii'))
+                all_nodes.add(value.encode('ascii'))
                 m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
                 links.append(m)
             else:
-                n = {"category":1, "name":key.encode('ascii')}
-                nodes.append(n)
+                all_nodes.add(key.encode('ascii'))
+                all_nodes.add(value.encode('ascii'))
                 m = {"source":key.encode('ascii'), "target":value.encode('ascii'), "weight":1}
                 links.append(m)
-    # links.append({"source":"0073","target":"0035","weight":1})
-    # print len(links)
+    # links.append({"source":"00EB","target":"0015","weight":1})
+    # print links
+    # print all_nodes
+    for no in all_nodes:
+        n = {"category":1, "name":no}
+        nodes.append(n)
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     return nodes,links,timedisplay

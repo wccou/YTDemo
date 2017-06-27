@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Guoxuenan
 # @Date:   2017-01-15 16:49:22
-# @Last Modified by:   gxn
-# @Last Modified time: 2017-04-02 20:53:17
+# @Last Modified by:   Guoxuenan
+# @Last Modified time: 2017-06-27 21:07:35
 import time,os,random,sqlite3
 # CREATE TABLE NetMonitor(ID INTEGER PRIMARY KEY AUTOINCREMENT,NodeID varchar,
 # ParentID varchar, CPU bigint, LPM bigint, TX bigint, RX bigint, volage float, syntime int, beacon int, numneighbors int, rtimetric int, reboot int, cycletime int, cycletimeDirection varchar, Nodecurrenttime time, currenttime time,electric float);
