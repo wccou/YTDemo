@@ -4,25 +4,26 @@ import socket
 import json
 import os
 from app import app
+from flask import session
 #登录控制
 class loginjudge:
+	mark = 0
 	def __init__(self):
-		self.Config_FILE = 'login.txt'
-		f=open(self.Config_FILE,'r')
-		f.close()
+		if "mark" in session:
+			if session["mark"] == "true":
+				self.mark = 1
 	def turntrue(self):
-		with open(self.Config_FILE, 'w') as f:
-			f.write("True")
-			f.close()
+		session["mark"] = "true"
+		self.mark = 1
 	def turnfalse(self):
-		with open(self.Config_FILE, 'w') as f:
-			f.write("False")
-			f.close()
+		session["mark"] = "false"
+		self.mark = 0
 
 	def getPCAPS(self):
-		with open(self.Config_FILE, 'r') as f:
-			return f.readline()
-
+		if self.mark == 1:
+			return "True"
+		else:
+			return "False"
 
 #首页信息展示
 class Connect:

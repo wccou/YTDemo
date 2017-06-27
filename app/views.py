@@ -2,7 +2,7 @@
 __author__ = 'dj'
 
 from app import app
-from flask import Flask, render_template, request, flash, redirect, url_for, send_from_directory
+from flask import Flask, session,render_template, request, flash, redirect, url_for, send_from_directory
 from forms import Upload, ProtoFilter,User_and_pwd
  
 from utils.gxn_topo_handler import getfile_content,getall_topo,showdata_from_id,topo_filter
