@@ -1050,6 +1050,7 @@ def login():
         # print login_msg.password.data
         USERNAME = hashlib.sha256(login_msg.username.data).hexdigest()
         PASSWRD  = hashlib.sha256(login_msg.password.data).hexdigest()
+        LOGIN.turntrue()
         if USERNAME==HIT_USER and PASSWRD==HIT_PWD:
             LOGIN.turntrue()
             # print PCAPS
@@ -1168,7 +1169,7 @@ def appflowanalyzer():
 @app.route('/count_appdata/', methods=['POST', 'GET'])
 def count_appdata():
     databasepath = os.path.join(app.config['TOPO_FOLDER'],"topo3.db")
-    iLOGIN = loginjudge()
+    LOGIN = loginjudge()
     if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
         return redirect(url_for('login'))
@@ -1213,7 +1214,10 @@ def appdataanalyzer():
         return render_template('./dataanalyzer/appdataanalyzer.html',timelist=timelist[0], nodelist = nodeid_list,time=timelist[1],node=nodepick)
     else:
         node = DATABASE.my_db_execute('select distinct NodeID from ApplicationData limit 1;',None)
-        nodeid = (node[0][0].encode('ascii'))
+	if len(node)>0:
+        	nodeid = (node[0][0].encode('ascii'))
+	else:
+		nodeid="xx"
         t = time.time()
         current_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
         previous_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(t - 6*60*60))   

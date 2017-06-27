@@ -105,7 +105,7 @@ def restart_display(time1,time2,dbitem):
     data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime asc;"),(time1, time2))
     if len(data)!=0:
         counter=len(data)-1
-        while len(ID_set)>0:
+        while len(ID_set)>0 and counter>-1:
             if data[counter][1] in ID_set:
                 data_dict[data[counter][1]] = data[counter][0]
                 ID_set.remove(data[counter][1])
@@ -116,7 +116,7 @@ def restart_display(time1,time2,dbitem):
     data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime desc;"),(time1, time2))
     if len(data)!=0:
         counter=len(data)-1
-        while len(ID_set)>0:
+        while len(ID_set)>0 and counter > -1:
             if data[counter][1] in ID_set:
                 data_dict1[data[counter][1]] = data[counter][0]
                 ID_set.remove(data[counter][1])
@@ -142,7 +142,7 @@ def singledisplay(time1,time2,dbitem):
     data = DATABASE.my_db_execute(("select "+ dbitem +",NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime asc;"),(time1, time2))
     if len(data)!=0:
         counter=len(data)-1
-        while len(ID_set)>0:
+        while len(ID_set)>0 and counter >-1:
             if data[counter][1] in ID_set:
                 data_dict[data[counter][1]] = data[counter][0]
                 ID_set.remove(data[counter][1])
@@ -174,7 +174,7 @@ def energy_display(time1,time2):
     energy = DATABASE.my_db_execute("select CPU,LPM,TX,RX,NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime asc;",(time1, time2))
     if len(energy)!=0:
         counter=len(energy)-1
-        while len(ID_set)>0:
+        while len(ID_set)>0 and counter > -1:
             if energy[counter][4] in ID_set:
                 cpu_list.append(round(float(energy[counter][0])/32768,2))
                 lpm_list.append(round(float(energy[counter][1])/32768,2))
