@@ -3,7 +3,6 @@
 WTF_CSRF_ENABLED = False
 
 SECRET_KEY = '!@#$%8F6F98EC3684AECA1DC44E1CB816E4A5^&*()'
-PCAPS = None
 
 TOPO_FOLDER   = '/root/concentratorback/'
 DB_FOLDER     = '/root/concentratorback/'
