@@ -7,7 +7,7 @@ from app import app
 from flask import session
 #登录控制
 class loginjudge:
-	mark = 1
+	mark = 0
 	def __init__(self):
 		if "mark" in session:
 			if session["mark"] == "true":

@@ -1042,15 +1042,16 @@ def post_config():
 def login():
     global HIT_USER,HIT_PWD
     LOGIN = loginjudge()
-    login_msg=User_and_pwd()
+    # login_msg=User_and_pwd()
     if request.method == 'GET':
         return render_template('./login/login.html')
     elif request.method == 'POST':
         # print login_msg.username.data
         # print login_msg.password.data
-        USERNAME = hashlib.sha256(login_msg.username.data).hexdigest()
-        PASSWRD  = hashlib.sha256(login_msg.password.data).hexdigest()
-        LOGIN.turntrue()
+        username = request.form['username']
+        password = request.form['password']
+        USERNAME = hashlib.sha256(username).hexdigest()
+        PASSWRD  = hashlib.sha256(password).hexdigest()
         if USERNAME==HIT_USER and PASSWRD==HIT_PWD:
             LOGIN.turntrue()
             # print PCAPS
