@@ -20,6 +20,7 @@ def multipledisplay(time1,time2,dbitems):
     # print time1,time2,Data_set
     for x in Data_set:
         dicts=dict()
+        # print x
         time_ms = time.mktime(time.strptime(x[2],'%Y-%m-%d %H:%M:%S'))*1000
         dicts["name"] = x[0].encode('ascii')
         # print time_ms
@@ -106,9 +107,9 @@ def restart_display(time1,time2,dbitem):
     if len(data)!=0:
         counter=len(data)-1
         while len(ID_set)>0 and counter>-1:
-            if data[counter][1] in ID_set:
+            if data[counter][1].upper() in ID_set:
                 data_dict[data[counter][1]] = data[counter][0]
-                ID_set.remove(data[counter][1])
+                ID_set.remove(data[counter][1].upper())
             counter=counter-1
 
     ID_list = NetID_list(time1,time2)
@@ -117,16 +118,19 @@ def restart_display(time1,time2,dbitem):
     if len(data)!=0:
         counter=len(data)-1
         while len(ID_set)>0 and counter > -1:
-            if data[counter][1] in ID_set:
+            if data[counter][1].upper() in ID_set:
                 data_dict1[data[counter][1]] = data[counter][0]
-                ID_set.remove(data[counter][1])
+                ID_set.remove(data[counter][1].upper())
             counter=counter-1
     # print data_dict
     # print data_dict1
 
     count=0
     for key, value in data_dict.items():
-        data_list.append(value-data_dict1[key])
+        if value > data_dict1[key]:
+            data_list.append(value-data_dict1[key])
+        else:
+            data_list.append(value+256-data_dict1[key])
         count+=1
         if count%2!=0:
             key+='      '
@@ -143,9 +147,9 @@ def singledisplay(time1,time2,dbitem):
     if len(data)!=0:
         counter=len(data)-1
         while len(ID_set)>0 and counter >-1:
-            if data[counter][1] in ID_set:
+            if data[counter][1].upper() in ID_set:
                 data_dict[data[counter][1]] = data[counter][0]
-                ID_set.remove(data[counter][1])
+                ID_set.remove(data[counter][1].upper())
             counter=counter-1
         data_dict = sorted(data_dict.iteritems(), key=lambda d:d[1], reverse=True)
         ID_list = list()
@@ -171,17 +175,19 @@ def energy_display(time1,time2):
 
     ID_list = NetID_list(time1,time2)
     ID_set = set(ID_list)
+    # print ID_set
     energy = DATABASE.my_db_execute("select CPU,LPM,TX,RX,NodeID from NetMonitor where currenttime >= ? and currenttime <= ? order by currenttime asc;",(time1, time2))
     if len(energy)!=0:
         counter=len(energy)-1
         while len(ID_set)>0 and counter > -1:
-            if energy[counter][4] in ID_set:
+            if energy[counter][4].upper() in ID_set:
                 cpu_list.append(round(float(energy[counter][0])/32768,2))
                 lpm_list.append(round(float(energy[counter][1])/32768,2))
                 tx_list.append(round(float(energy[counter][2])/32768,2))
                 rx_list.append(round(float(energy[counter][3])/32768,2))
-                ID_set.remove(energy[counter][4])
+                ID_set.remove(energy[counter][4].upper())
             counter=counter-1
+    # print ID_set
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     return cpu_list,lpm_list,tx_list,rx_list,timedisplay
 

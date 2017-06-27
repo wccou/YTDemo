@@ -129,6 +129,11 @@
 {% autoescape false %}
 <script type="text/javascript">
 $(function () {
+        Highcharts.setOptions({
+　　global: {
+　　　　timezoneOffset: -8 * 60
+　　　　　　}
+});
     $('#topo').highcharts({
         chart: {
             type: 'spline',

@@ -141,6 +141,11 @@
 {% autoescape false %}
     <script type="text/javascript">
 $(function () {
+        Highcharts.setOptions({
+　　global: {
+　　　　timezoneOffset: -8 * 60
+　　　　　　}
+});
     $('#time_flow').highcharts({
         chart: {
             type: 'spline',

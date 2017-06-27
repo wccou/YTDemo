@@ -92,7 +92,7 @@ def data_error_new(time1,time2):
         warning_dict_i["name"] = "None"
         warning_dict_i["evolution"] = [warning_dict_temp]
         warning_list_i.append(warning_dict_i)
-    # print warning_list_i
+    # print len(warning_list_i)
     
     vdata = DATABASE.my_db_execute('select volage, NodeID, currenttime from NetMonitor where currenttime >= ? and currenttime <= ? and volage<3;',(time1, time2))
     if vdata:
@@ -136,12 +136,22 @@ def data_error_new(time1,time2):
         warning_dict_v["name"] = "None"
         warning_dict_v["evolution"] = [warning_dict_temp]
         warning_list_v.append(warning_dict_v)
-    # print warning_list_v
+
     nodeinfo = DATABASE.my_db_execute('select * from NodePlace;',None)
-    lists = list() # nodeplace info
+    error_set = set()
     for info in nodeinfo:
-        if info[1] in (inodeset | vnodeset):
-            lists.append([info[1],info[2],info[3]])
+        # print "====",info[1].encode('ascii')
+        if info[1].encode('ascii').lower() in inodeset:
+            # print info[1].encode('ascii')
+            error_set.add(info)
+        if info[1].encode('ascii').lower() in vnodeset:
+            error_set.add(info)
+    lists = list()
+    # print error_set,len(error_set)
+    # print inodeset,len(inodeset)
+    # print vnodeset
+    for x in error_set:
+        lists.append([x[1],x[2],x[3]])
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     return warning_list_v,warning_list_i,lists,timedisplay
 

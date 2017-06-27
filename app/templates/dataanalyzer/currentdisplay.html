@@ -100,6 +100,7 @@
 
         });
     </script>
+
 </head>
 <body>
 <div>
@@ -128,11 +129,17 @@
 {% autoescape false %}
 <script type="text/javascript">
 $(function () {
+    Highcharts.setOptions({
+　　global: {
+　　　　timezoneOffset: -8 * 60
+　　　　　　}
+});
     $('#topo').highcharts({
         chart: {
             type: 'spline',
             zoomType: 'x'
         },
+    
         title:"平均电流",
         xAxis: {
             type: 'datetime',
