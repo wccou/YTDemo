@@ -335,7 +335,7 @@ def selectall(time1,time2,db):
 
 def topo_display(time1,time2):
     getrootaddr = Connect()
-    rootID = getrootaddr.rootaddr()
+    rootID = getrootaddr.rootaddr().upper()
     if len(rootID)==3:
         rootID = "0"+rootID
     elif len(rootID)==2:
