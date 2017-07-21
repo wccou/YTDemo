@@ -658,7 +658,7 @@ def instruction_send():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     sendins.TCP_send(ins)
-    # print ins
+    #print ins
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_write/', methods=['POST', 'GET'])
@@ -721,7 +721,7 @@ def instruction_restart():
         # addrlist.append(nodeip)
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
-    # print ins
+    #print ins
     sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
@@ -768,6 +768,52 @@ def instruction_adjtime():
     
     sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
+
+
+@app.route('/instruction_WakeUp/', methods=['POST', 'GET'])
+@app.route('/instruction_WakeUp', methods=['POST', 'GET'])
+#唤醒指令下发
+def instruction_WakeUp():
+    sendins = Connect()
+    dicts = {}
+    dicts["pama_data"] = "C3"
+    if request.method == 'POST':
+        transmit_type = request.form['mySelect4']
+        nodeip = request.form.getlist('NodeIP4')
+    dicts["type"] = transmit_type
+    if (transmit_type=="mcast"):
+        ins = json.dumps(dicts)
+    else:
+        # addrlist = []
+        # addrlist.append(nodeip)
+        dicts["addrList"] = nodeip
+        ins = json.dumps(dicts)
+    #print ins
+    sendins.TCP_send(ins)
+    return render_template('./client/monitor.html',display_datadict=None)
+
+@app.route('/instruction_QueryWakeUp/', methods=['POST', 'GET'])
+@app.route('/instruction_QueryWakeUp', methods=['POST', 'GET'])
+#唤醒查询指令下发
+def instruction_QueryWakeUp():
+    sendins = Connect()
+    dicts = {}
+    dicts["pama_data"] = "C4"
+    if request.method == 'POST':
+        transmit_type = request.form['mySelect4']
+        nodeip = request.form.getlist('NodeIP4')
+    dicts["type"] = transmit_type
+    if (transmit_type=="mcast"):
+        ins = json.dumps(dicts)
+    else:
+        # addrlist = []
+        # addrlist.append(nodeip)
+        dicts["addrList"] = nodeip
+        ins = json.dumps(dicts)
+    #print ins
+    sendins.TCP_send(ins)
+    return render_template('./client/monitor.html',display_datadict=None)
+
 
 @app.route('/instruction3/', methods=['POST', 'GET'])
 @app.route('/instruction3', methods=['POST', 'GET'])
