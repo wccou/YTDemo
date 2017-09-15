@@ -17,14 +17,14 @@ def multipledisplay(time1,time2,dbitems):
 
     dlist=  list()
     Data_set = DATABASE.my_db_execute(("select NodeID,"+ dbitems +",currenttime from NetMonitor where currenttime >= ? and currenttime <= ?;"),(time1, time2))    
-    # print time1,time2,Data_set
+    #print time1,time2,Data_set
     for x in Data_set:
         dicts=dict()
         # print x
         time_ms = time.mktime(time.strptime(x[2],'%Y-%m-%d %H:%M:%S'))*1000
         dicts["name"] = x[0].encode('ascii')
         # print time_ms
-        dicts["data"] = [time_ms,int(x[1])]
+        dicts["data"] = [time_ms,x[1]]
         dlist.append(dicts)     
         # {'data': [1493568035000L, 835], 'name': u'0101'}
 
