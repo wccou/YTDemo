@@ -89,6 +89,12 @@ class Config:
         self.write_config()
         return
 
+    def recommend_schedule4(self):
+        lists = [-64, 0, 0, 0, 12, 0, 0, 0, 0, -64, 0, 0, 0, 12, 0, 0, 0, 0,]
+        self.CONFIG_DICT['bitmap']=lists
+        self.write_config()
+        return
+
     def get_active_list(self):
         # bitlist= self.CONFIG_DICT['bitmap']
         # print self.CONFIG_DICT['bitmap']

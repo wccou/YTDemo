@@ -69,6 +69,7 @@
     <button class="btn btn-success" onclick="recommend2()" style="font-size:18px">推荐调度1</button>
     <button class="btn btn-warning" onclick="recommend3()" style="font-size:18px">推荐调度2</button>
     <button class="btn btn-danger" onclick="recommend1()" style="font-size:18px">推荐调度3</button>
+    <button class="btn btn-info" onclick="recommend4()" style="font-size:18px">推荐调度4</button>
     </div>
 <br>
 
@@ -306,6 +307,22 @@
          $.ajax({
         type:"post",
         url:"{{url_for('recommend_schedule3')}}",
+        cache:false,
+        contentType: "application/json;charset=UTF-8",
+        dataType:"json",
+        success: function(dat) { 
+            if (dat =="2")
+            {
+                 location.reload();
+            }
+        }
+    });
+    }
+
+    function recommend4(){
+         $.ajax({
+        type:"post",
+        url:"{{url_for('recommend_schedule4')}}",
         cache:false,
         contentType: "application/json;charset=UTF-8",
         dataType:"json",

@@ -966,6 +966,13 @@ def recommend_schedule3():
         syn_config.recommend_schedule3()
     return "2"
 
+@app.route('/recommend_schedule4/',methods=['POST', 'GET'])
+@app.route('/recommend_schedule4',methods=['POST', 'GET'])
+def recommend_schedule4():
+    if request.method == 'POST':
+        syn_config = Config()
+        syn_config.recommend_schedule4()
+    return "2"
 
     
 @app.route('/update_schedule/',methods=['POST', 'GET'])
@@ -989,8 +996,8 @@ def update_schedule():
             senddicts["pama_data"] = config_dict
             senddicts["type"] = "pama_syn"
             update_synperiod_ins = json.dumps(senddicts)
-            sendins.TCP_send(update_synperiod_ins)
-            # print update_synperiod_ins
+            #sendins.TCP_send(update_synperiod_ins)
+            print update_synperiod_ins
         else:
             bitmaplist = config_dict["bitmap"]
             subkey = ['minute', 'seqNum', 'level', 'bitmap', 'second', 'hour']
@@ -999,8 +1006,8 @@ def update_schedule():
             senddicts["type"] = "schedule"
             update_schedule_ins = json.dumps(senddicts)
             config_dict["bitmap"] = bitmaplist
-            sendins.TCP_send(update_schedule_ins)  
-            # print update_schedule_ins
+            #sendins.TCP_send(update_schedule_ins)  
+            print update_schedule_ins
     l=syn_config.get_active_list()
     dicts={'lists':l}
     lists= json.dumps(dicts)
