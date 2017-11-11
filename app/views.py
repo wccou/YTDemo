@@ -812,7 +812,7 @@ def instruction_QueryWakeUp():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 
@@ -844,7 +844,7 @@ def debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 
@@ -878,7 +878,7 @@ def quit_debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
 
     return render_template('./client/monitor.html',display_datadict=None)
 ##########################################################################################
