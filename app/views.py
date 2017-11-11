@@ -835,7 +835,8 @@ def debug_mode():
     if request.method == 'POST':
         transmit_type = request.form['mySelect4']
         nodeip = request.form.getlist('NodeIP4')
-    dicts["type"] = transmit_type
+    dicts["type"] = "debug"
+    #print transmit_type
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
     else:
@@ -844,7 +845,7 @@ def debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    sendins.TCP_send(ins)
+    #sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 
@@ -869,7 +870,7 @@ def quit_debug_mode():
     if request.method == 'POST':
         transmit_type = request.form['mySelect4']
         nodeip = request.form.getlist('NodeIP4')
-    dicts["type"] = transmit_type
+    dicts["type"] = "debug"
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
     else:
@@ -878,7 +879,7 @@ def quit_debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    sendins.TCP_send(ins)
+    #sendins.TCP_send(ins)
 
     return render_template('./client/monitor.html',display_datadict=None)
 ##########################################################################################
