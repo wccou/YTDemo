@@ -25,6 +25,7 @@ import socket
 import json
 import math
 import hashlib
+import string
 
 #导入函数到模板中
 app.jinja_env.globals['enumerate'] = enumerate
@@ -601,6 +602,57 @@ def app_data():
 @app.route('/monitor/', methods=['POST', 'GET'])
 @app.route('/monitor', methods=['POST', 'GET'])
 def monitor():
+################################################3
+    file = open("shedule_now.txt","r")                      #[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+    print "ada"
+    bitmap = []
+    for line in file:
+        f = line.split(",")
+        f.pop()
+        for i in f:
+            bitmap.append(int(i))
+        #print bitmap
+
+    bitbitmap = [0]*144
+    for i in range (0, 18):
+        temp = bitmap[i]
+        eight = []
+        print temp
+        for j in range (0, 8):
+            eight.append(temp & 1)
+            temp = temp >> 1
+            bitbitmap[8 * i + 7 - j] = eight.pop()
+        print eight
+
+    print bitbitmap
+
+
+    now_time = datetime.datetime.now()
+    now_second = now_time.second
+    now_minute = now_time.minute
+    now_hour = now_time.hour
+    print now_time, now_hour, now_minute, now_second
+
+    count = now_hour*6+now_minute/10
+
+    print "第",count+1,"个"
+    if (bitbitmap[count]==1):
+        flag = 1
+    else:
+        flag = 0
+    print flag
+    if (flag == 0):   #说明处于非活跃周期
+        wait_time = 630 - now_minute/10 * 60 - now_second
+        print "当前处于非活跃期，还需要等待%d秒" % wait_time
+    else:
+        wait_time = 0
+        print "当前处于活跃期，不需要等待"
+    if (now_minute/10 == 0):
+        wait_time = now_minute/10
+    else:
+        wait_time = now_minute/10 + 1
+#############################################
+
     LOGIN = loginjudge()
     if LOGIN.getPCAPS() == "False":
         flash(u"请完成认证登陆!")
@@ -617,7 +669,7 @@ def monitor():
         for item in IP_set:
             IP_list.append(item[0])
 
-    return render_template('./client/monitor.html',send_data = send_data, write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict,IP_list=IP_list)
+    return render_template('./client/monitor.html',send_data = send_data, wait_time = wait_time*10,now_hour = now_hour,write_data = write_data, adjtime_data = adjtime_data, display_datadict = display_datadict,IP_list=IP_list)
 
 @app.route('/instruction_send/', methods=['POST', 'GET'])
 @app.route('/instruction_send', methods=['POST', 'GET'])
@@ -829,6 +881,52 @@ def instruction_QueryWakeUp():
 @app.route('/debug_mode', methods=['POST', 'GET'])
 #进入调试模式  即发送一个全开的调度
 def debug_mode():
+
+
+    file = open("shedule_now.txt","r")                      #[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+    print "ada"
+    bitmap = []
+    for line in file:
+        f = line.split(",")
+        f.pop()
+        for i in f:
+            bitmap.append(int(i))
+        #print bitmap
+
+    bitbitmap = [0]*144
+    for i in range (0, 18):
+        temp = bitmap[i]
+        eight = []
+        print temp
+        for j in range (0, 8):
+            eight.append(temp & 1)
+            temp = temp >> 1
+            bitbitmap[8 * i + 7 - j] = eight.pop()
+        print eight
+
+    print bitbitmap
+
+
+    now_time = datetime.datetime.now()
+    now_second = now_time.second
+    now_minute = now_time.minute
+    now_hour = now_time.hour
+    print now_time, now_hour, now_minute, now_second
+
+    count = now_hour*6+now_minute/10
+
+    print "第",count+1,"个"
+    if (bitbitmap[count]==1):
+        flag = 1
+    else:
+        flag = 0
+    print flag
+    if (flag == 0):   #说明处于非活跃周期
+        wait_time = 630 - now_minute/10 * 60 - now_second
+        print "当前处于非活跃期，还需要等待%d秒" % wait_time
+    else:
+        wait_time = 0
+        print "当前处于活跃期，不需要等待"
     sendins = Connect()
     dicts = {}                            #[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
     dicts["pama_data"] = {"itype": 42, "bitmap": [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]}
@@ -845,8 +943,11 @@ def debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    #sendins.TCP_send(ins)
-    return render_template('./client/monitor.html',display_datadict=None)
+    # sendins.TCP_send(ins)
+    mywait_time = wait_time
+    print mywait_time
+
+    return render_template('./client/monitor.html',waiting_time = mywait_time, display_datadict=None)
 
 
 @app.route('/quit_debug_mode/', methods=['POST', 'GET'])
@@ -879,7 +980,7 @@ def quit_debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
 
     return render_template('./client/monitor.html',display_datadict=None)
 ##########################################################################################

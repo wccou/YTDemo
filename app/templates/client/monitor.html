@@ -111,6 +111,7 @@ function check5(object)
                         <li><a href="#section-underline-8"><span>唤醒查询</span></a></li>
                         <li><a href="#section-underline-9"><span>调试模式</span></a></li>
                         <li><a href="#section-underline-10"><span>退出调试模式</span></a></li>
+                      
                     </ul>
                 </nav>
                 <div class="content-wrap">
@@ -409,8 +410,9 @@ function check5(object)
                             <option value="mcast_ack" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
                             <option value="unicast_ack" >&nbsp;单&nbsp;播&nbsp;</option>
                         </select>
-                     　<button style="height:40px; font-size:19px" type="submit" class="btn btn-success">调试模式
+                     　<button  onclick="alert('调试指令已下发，请等待{{sfaf}}再下发其他指令！')" style="height:40px; font-size:19px" type="submit" class="btn btn-success">调试模式
                      </button>
+                     <div>调试指令将于{{now_hour}}点{{wait_time}}分生效，在此之前不要下发其他指令</div>
                         <div id="ipselect4" style="display: none"> 
                         <label>节点选择:(最多选择5项)</label>
                         <form id="nodeIP4" name="nodeIP4" class="form-horizontal" role="form" onchange="check(this)">
