@@ -712,6 +712,7 @@ def instruction_send():
         ins = json.dumps(dicts)
     #sendins.TCP_send(ins)
     print ins   #{"type": "mcast", "pama_data": "80105BFE5916"}
+    #sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_write/', methods=['POST', 'GET'])
@@ -774,8 +775,8 @@ def instruction_restart():
         # addrlist.append(nodeip)
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
-    #print ins
-    sendins.TCP_send(ins)
+    print ins
+    #sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_reset/', methods=['POST', 'GET'])
@@ -796,9 +797,9 @@ def instruction_reset():
         # addrlist.append(nodeip)
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
-    
-    sendins.TCP_send(ins)
-    # print ins
+    print ins
+    #sendins.TCP_send(ins)
+    #print ins
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_adjtime/', methods=['POST', 'GET'])
@@ -818,8 +819,8 @@ def instruction_adjtime():
     dicts["pama_data"] = recvdata
     dicts["type"] = "pama_corr"
     ins = json.dumps(dicts)
-    
-    sendins.TCP_send(ins)
+    print ins
+    #sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 
@@ -831,8 +832,8 @@ def instruction_WakeUp():
     dicts = {}
     dicts["pama_data"] = "C3"
     if request.method == 'POST':
-        transmit_type = request.form['mySelect4']
-        nodeip = request.form.getlist('NodeIP4')
+        transmit_type = request.form['mySelect7']
+        nodeip = request.form.getlist('NodeIP7')
     dicts["type"] = transmit_type
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
@@ -841,8 +842,8 @@ def instruction_WakeUp():
         # addrlist.append(nodeip)
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
-    #print ins
-    sendins.TCP_send(ins)
+    print ins
+    #sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_QueryWakeUp/', methods=['POST', 'GET'])
@@ -853,8 +854,8 @@ def instruction_QueryWakeUp():
     dicts = {}
     dicts["pama_data"] = "C4"
     if request.method == 'POST':
-        transmit_type = request.form['mySelect4']
-        nodeip = request.form.getlist('NodeIP4')
+        transmit_type = request.form['mySelect8']
+        nodeip = request.form.getlist('NodeIP8')
     dicts["type"] = transmit_type
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
@@ -864,7 +865,7 @@ def instruction_QueryWakeUp():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    sendins.TCP_send(ins)
+    #sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 
@@ -931,8 +932,8 @@ def debug_mode():
     dicts = {}                            #[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
     dicts["pama_data"] = {"itype": 42, "bitmap": [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]}
     if request.method == 'POST':
-        transmit_type = request.form['mySelect4']
-        nodeip = request.form.getlist('NodeIP4')
+        transmit_type = request.form['mySelect9']
+        nodeip = request.form.getlist('NodeIP9')
     dicts["type"] = "debug"
     #print transmit_type
     if (transmit_type=="mcast"):
@@ -969,8 +970,8 @@ def quit_debug_mode():
     #print shedule_old
     dicts["pama_data"] = {"itype": 42, "bitmap": shedule_old}
     if request.method == 'POST':
-        transmit_type = request.form['mySelect4']
-        nodeip = request.form.getlist('NodeIP4')
+        transmit_type = request.form['mySelect10']
+        nodeip = request.form.getlist('NodeIP10')
     dicts["type"] = "debug"
     if (transmit_type=="mcast"):
         ins = json.dumps(dicts)
@@ -980,7 +981,7 @@ def quit_debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    sendins.TCP_send(ins)
+    #sendins.TCP_send(ins)
 
     return render_template('./client/monitor.html',display_datadict=None)
 ##########################################################################################
