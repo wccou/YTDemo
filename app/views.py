@@ -629,8 +629,8 @@ def monitor():
 
     now_time = datetime.datetime.now()
     now_second = now_time.second
-    now_minute = now_time.minute
-    now_hour = now_time.hour
+    now_minute = 11 #now_time.minute
+    now_hour = 0#now_time.hour
     print now_time, now_hour, now_minute, now_second
 
     count = now_hour*6+now_minute/10
@@ -641,16 +641,17 @@ def monitor():
     else:
         flag = 0
     print flag
+    #flag = 1
     if (flag == 0):   #说明处于非活跃周期
-        wait_time = 630 - now_minute/10 * 60 - now_second
+        wait_time = now_minute/10 + 1
+        if (wait_time == 6):
+            wait_time =0
+            now_hour = (now_hour + 1) % 24
         print "当前处于非活跃期，还需要等待%d秒" % wait_time
     else:
-        wait_time = 0
-        print "当前处于活跃期，不需要等待"
-    if (now_minute/10 == 0):
         wait_time = now_minute/10
-    else:
-        wait_time = now_minute/10 + 1
+        print "当前处于活跃期，不需要等待"
+    
 #############################################
 
     LOGIN = loginjudge()
@@ -710,7 +711,6 @@ def instruction_send():
         # addrlist.append(nodeip)
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
-    #sendins.TCP_send(ins)
     print ins   #{"type": "mcast", "pama_data": "80105BFE5916"}
     #sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
@@ -755,7 +755,7 @@ def instruction_write():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins      #{"type": "mcast", "pama_data": "82105BFE5916"}
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 @app.route('/instruction_restart/', methods=['POST', 'GET'])
 @app.route('/instruction_restart', methods=['POST', 'GET'])
@@ -776,7 +776,7 @@ def instruction_restart():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_reset/', methods=['POST', 'GET'])
@@ -798,8 +798,7 @@ def instruction_reset():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins
-    #sendins.TCP_send(ins)
-    #print ins
+    sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_adjtime/', methods=['POST', 'GET'])
@@ -820,7 +819,7 @@ def instruction_adjtime():
     dicts["type"] = "pama_corr"
     ins = json.dumps(dicts)
     print ins
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 
@@ -843,7 +842,7 @@ def instruction_WakeUp():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 @app.route('/instruction_QueryWakeUp/', methods=['POST', 'GET'])
@@ -865,7 +864,7 @@ def instruction_QueryWakeUp():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
     return render_template('./client/monitor.html',display_datadict=None)
 
 
@@ -944,7 +943,7 @@ def debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    # sendins.TCP_send(ins)
+    #sendins.TCP_send(ins)
     mywait_time = wait_time
     print mywait_time
 
@@ -981,7 +980,7 @@ def quit_debug_mode():
         dicts["addrList"] = nodeip
         ins = json.dumps(dicts)
     print ins         #{"addrList": [], "type": "mcast_ack", "pama_data": "C4"}
-    #sendins.TCP_send(ins)
+    sendins.TCP_send(ins)
 
     return render_template('./client/monitor.html',display_datadict=None)
 ##########################################################################################
