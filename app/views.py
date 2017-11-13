@@ -629,8 +629,8 @@ def monitor():
 
     now_time = datetime.datetime.now()
     now_second = now_time.second
-    now_minute = 11 #now_time.minute
-    now_hour = 0#now_time.hour
+    now_minute = now_time.minute
+    now_hour = now_time.hour
     print now_time, now_hour, now_minute, now_second
 
     count = now_hour*6+now_minute/10
