@@ -147,6 +147,48 @@ function check10(object)
     }
 }
 </script>
+<script type="text/javascript">
+function check11(object)
+{
+    var value = object.value;
+    if(value=="unicast_ack")
+    {
+        document.getElementById('ipselect11').style.display="block";
+    }
+    else if (value=="mcast_ack")
+    {
+        document.getElementById('ipselect11').style.display="none";
+    }
+}
+</script>
+<script type="text/javascript">
+function check12(object)
+{
+    var value = object.value;
+    if(value=="unicast_ack")
+    {
+        document.getElementById('ipselect12').style.display="block";
+    }
+    else if (value=="mcast_ack")
+    {
+        document.getElementById('ipselect12').style.display="none";
+    }
+}
+</script>
+<script type="text/javascript">
+function check13(object)
+{
+    var value = object.value;
+    if(value=="unicast_ack")
+    {
+        document.getElementById('ipselect13').style.display="block";
+    }
+    else if (value=="mcast_ack")
+    {
+        document.getElementById('ipselect13').style.display="none";
+    }
+}
+</script>
 </head>
 
 
@@ -169,6 +211,14 @@ function check10(object)
                         <li><a href="#section-underline-10"><span>退出调试模式</span></a></li>
                       
                     </ul>
+                     <ul>
+                        <li><a href="#section-underline-11"><span>自动开关阀</span></a></li>
+
+                        <li><a href="#section-underline-12"><span>强制开阀</span></a></li>
+
+                        <li><a href="#section-underline-13"><span>强制关阀</span></a></li>
+                    </ul>
+
                 </nav>
                 <div class="content-wrap">
                     <section id="section-underline-1">
@@ -177,7 +227,7 @@ function check10(object)
 
                        <hr>
                        <div class="container">  
-                        <input  style="height:41px; font-size:19px" type="text" name="emit_data" placeholder={{send_data}}>
+                        <input  style="height:41px; font-size:19px" type="text" name="emit_data" placeholder={{send_data}}/>
                         <select style="height:41px; font-size:19px" id="mySelect"   name="mySelect" onchange="check(this)">
                             <option value="mcast" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
                             <option value="unicast" >&nbsp;单&nbsp;播&nbsp;</option>
@@ -329,11 +379,6 @@ function check10(object)
                             </div>
                           </form>
                         </div>
-                 　
-                        
-
-                        
-
                         </form>
                         <iframe id="iframe4" name="iframe4" style="display:none;"></iframe> 
 
@@ -412,14 +457,8 @@ function check10(object)
                             </div>
                           </form>
                         </div>
-                 　
-                        
-
-                        
-
                         </form>
                         <iframe id="iframe7" name="iframe7" style="display:none;"></iframe> 
-
                     </section>
 
                     <section id="section-underline-8">
@@ -447,14 +486,8 @@ function check10(object)
                             </div>
                           </form>
                         </div>
-                 　
-                        
-
-                        
-
                         </form>
                         <iframe id="iframe8" name="iframe8" style="display:none;"></iframe> 
-
                     </section>
 
                     <section id="section-underline-9">
@@ -483,14 +516,8 @@ function check10(object)
                             </div>
                           </form>
                         </div>
-                 　
-                        
-
-                        
-
                         </form>
                         <iframe id="iframe9" name="iframe9" style="display:none;"></iframe> 
-
                     </section>
 
                     <section id="section-underline-10">
@@ -518,14 +545,105 @@ function check10(object)
                             </div>
                           </form>
                         </div>
-                 　
-                        
-
-                        
-
                         </form>
                         <iframe id="iframe10" name="iframe10" style="display:none;"></iframe> 
+                    </section>
 
+                    <section id="section-underline-11">
+                        <form name="auto_on_off_valve" method="POST" target="iframe11" action='{{url_for('auto_on_off_valve')}}'>
+                       <hr>
+
+                       <div class="container">  
+                        <input  style="height:41px; font-size:19px" type="text" name="auto_on_off_valve" placeholder="{{auto_on_off_valve}}"/>
+                 
+
+                        <select style="height:41px; font-size:19px" id="mySelect11" name="mySelect11" onchange="check11(this)">
+                            <option value="mcast_ack" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
+                            <option value="unicast_ack" >&nbsp;单&nbsp;播&nbsp;</option>
+                        </select>
+                     　<button style="height:40px; font-size:19px" type="submit" class="btn btn-success">自动开关阀
+                     </button>
+                        <div id="ipselect11" style="display: none"> 
+                        <label>节点选择:(最多选择5项)</label>
+                        <form id="nodeIP11" name="nodeIP11" class="form-horizontal" role="form" onchange="check(this)">
+                            <div style="height:400px;width:300px; margin:0 auto;">
+                            <div class="col-lg-10">
+                                <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP11">
+                                {% for item in IP_list: %}
+                                    <option>{{item}}</option>
+                                {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+                          </form>
+                        </div>
+                        </div>
+                        <br />
+                        </form>
+                        <iframe id="iframe11" name="iframe11" style="display:none;"></iframe> 
+                    </section>
+
+
+                    <section id="section-underline-12">
+                        <form name="force_open_valve" target="iframe12" method="POST" action='{{url_for('force_open_valve')}}'>
+                       <hr>
+                        <input  style="height:41px; font-size:19px" type="text" name="force_open_valve" placeholder="{{force_open_valve}}"/>
+                 
+
+                        <select style="height:41px; font-size:19px" id="mySelect12" name="mySelect12" onchange="check12(this)">
+                            <option value="mcast_ack" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
+                            <option value="unicast_ack" >&nbsp;单&nbsp;播&nbsp;</option>
+                        </select>
+                     　<button style="height:40px; font-size:19px" type="submit" class="btn btn-success">强制开阀
+                     </button>
+                        <div id="ipselect12" style="display: none"> 
+                        <label>节点选择:(最多选择5项)</label>
+                        <form id="nodeIP12" name="nodeIP12" class="form-horizontal" role="form" onchange="check(this)">
+                            <div style="height:400px;width:300px; margin:0 auto;">
+                            <div class="col-lg-10">
+                                <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP12">
+                                {% for item in IP_list: %}
+                                    <option>{{item}}</option>
+                                {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+                          </form>
+                        </div>
+                        <br />
+
+                        </form>
+                        <iframe id="iframe12" name="iframe12" style="display:none;"></iframe> 
+                    </section>
+                    
+                    <section id="section-underline-13">
+                        <form name="force_close_valve" target="iframe13" method="POST" action='{{url_for('force_close_valve')}}'>
+                       <hr>
+                        <input  style="height:41px; font-size:19px" type="text" name="force_close_valve" placeholder="{{force_close_valve}}"/>                 
+
+                        <select style="height:41px; font-size:19px" id="mySelect13" name="mySelect13" onchange="check13(this)">
+                            <option value="mcast_ack" selected="selected">&nbsp;多&nbsp;播&nbsp;</option>
+                            <option value="unicast_ack" >&nbsp;单&nbsp;播&nbsp;</option>
+                        </select>
+                     　<button style="height:40px; font-size:19px" type="submit" class="btn btn-success">强制关阀
+                     </button>
+                        <div id="ipselect13" style="display: none"> 
+                        <label>节点选择:(最多选择5项)</label>
+                        <form id="nodeIP13" name="nodeIP13" class="form-horizontal" role="form" onchange="check(this)">
+                            <div style="height:400px;width:300px; margin:0 auto;">
+                            <div class="col-lg-10">
+                                <select class="selectpicker show-menu-arrow form-control" multiple data-max-options="5" name="NodeIP13">
+                                {% for item in IP_list: %}
+                                    <option>{{item}}</option>
+                                {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+                          </form>
+                        </div>
+                        <br />
+                        </form>
+                        <iframe id="iframe13" name="iframe13" style="display:none;"></iframe> 
                     </section>
 
 
