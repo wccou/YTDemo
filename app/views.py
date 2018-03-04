@@ -1526,6 +1526,11 @@ def flowanalyzer():
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         data = flowdisplay(start_time,end_time)
+        print data[0][2]
+        print data[1][2]
+        print '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\''
+        print data[0][3]
+        print data[1][3]
         return render_template('./dataanalyzer/trafficanalyzer.html', timeline=data[0],templist=data[1],time=data[4])
     else:
         t = time.time()
