@@ -306,6 +306,32 @@ def nodesearch_display(time1,time2,node):
     return nodeid_list,str(cpu),str(lpm),str(tx),str(rx),voltage_list,time_list_1,time_list_2,current_list,time_list_3,rtx_list,deploy,timedisplay,time_list_4,beacon_list
 
 
+def sensor_data_display(time1,time2,node):
+    time_list_1 = list()
+    time_list_2 = list()
+    time_list_3 = list()
+    time_list_4 = list()
+    time_list_5 = list()
+    lightintensity = list()
+    temperature = list()
+    atmospressure = list()
+    humidity = list()
+    altitude = list()
+    nodeid_list = NetID_all()
+    nodeid_list.sort()
+
+    lightintensity = DATABASE.my_db_execute('select Nodecurrenttime, light from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+
+    temperature = DATABASE.my_db_execute('select Nodecurrenttime, temperature from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+
+    atmospressure = DATABASE.my_db_execute('select Nodecurrenttime, atmospressure from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+
+    humidity = DATABASE.my_db_execute('select Nodecurrenttime, humidity from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+    
+    altitude = DATABASE.my_db_execute('select Nodecurrenttime, altitude from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+
+
+
 def node_time_display(time1,time2,db,node):
     data = DATABASE.my_db_execute("select currenttime from " + db + " where NodeID==? and currenttime >= ? and currenttime <= ?;",(node, time1, time2))
     count = 0
