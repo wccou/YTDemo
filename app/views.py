@@ -573,27 +573,24 @@ def atmospressure():
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         nodepick  =  request.form['nodeselect']
-        data = nodesearch_display(start_time,end_time,nodepick)
+        data = sensor_data_display(start_time,end_time,nodepick)
 
-        return render_template('./dataanalyzer/atmospressure.html',
-            nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
-            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+#nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
+        return render_template('./dataanalyzer/atmospressure.html',nodeid = nodepick,time = data[11],nodelist = data[0],atmospressure = data[5],timeline = data[6])
     else:
         if nodeid_list: 
             nodepick    =  nodeid_list[0]
             end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
             start_time  = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
-            data = nodesearch_display(start_time,end_time,nodepick)
+            data = sensor_data_display(start_time,end_time,nodepick)
         else:
             nodepick = None
             end_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
             start_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
-            data = nodesearch_display(start_time,end_time,nodepick)
+            data = sensor_data_display(start_time,end_time,nodepick)
 
         return render_template('./dataanalyzer/atmospressure.html',
-            nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
-            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
-
+            nodeid=str(nodepick),time = data[11],nodelist = data[0],atmospressure = data[5],timeline = data[6])
 #湿度信息查询
 @app.route('/humidity/', methods=['POST', 'GET'])
 @app.route('/humidity', methods=['POST', 'GET'])

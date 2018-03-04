@@ -162,27 +162,8 @@
 
          </div> 
 </div>
-<table class="table table-bordered">
-      <thead>
-        <tr>
-            <th class="text-center">节点ID</th>
-            <th class="text-center">表ID</th>
-            <th class="text-center">存放位置</th>
 
-        </tr>
-      </thead>
-      <tbody>
-
-      <tr data-toggle="modal" data-target="#myModal">
-          <td class="text-nowrap text-center">{{ deploy[0] }}</td>
-          <td class="text-center text-nowrap">{{ deploy[1] }}</td>
-          <td class="text-center text-nowrap">{{ deploy[2] }}</td>
-         
-        </tr>
-      </tbody>
-    </table>
-
-    <div id="light" style="height:600px;width:100%;float:left"></div>
+    <div id="atmospressure" style="height:600px;width:100%;float:left"></div>
 
 
 
@@ -209,7 +190,7 @@
             ],
             function (ec) {
                 // 基于准备好的dom，初始化echarts图表
-                var myChart = ec.init(document.getElementById('light'));
+                var myChart = ec.init(document.getElementById('atmospressure'));
 
                 option = {
                     title : {
@@ -240,7 +221,7 @@
                         {
                             type : 'category',
                             boundaryGap : false,
-                            data : {{time_list_1}}
+                            data : {{timeline}}
                         }
                     ],
                     yAxis : [
@@ -253,9 +234,9 @@
                     ],
                     series : [
                         {
-                            name:'最高电压',
+                            name:'气压',
                             type:'line',
-                            data:{{voltage_list}},
+                            data:{{atmospressure}},
                             itemStyle:{
                                 normal:{
                                     lineStyle:{
