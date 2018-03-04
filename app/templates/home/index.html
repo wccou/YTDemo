@@ -313,12 +313,6 @@
 						</li>
 						<li >
 
-							<a href="{{ url_for('node_sensor_infor') }}"  target="main-content">
-							   传感器数据
-							</a>
-						</li>
-						<li >
-
 							<a href="{{ url_for('network_data') }}" target="main-content">
 							   网络数据
 							</a>
@@ -353,6 +347,54 @@
 
 					</ul>
 				</li>
+
+
+				<li class="">
+
+					<a href="javascript:;">
+
+					<i class="icon-bar-chart"></i>
+
+					<span class="title">节点传感器数据</span>
+
+					<span class="arrow "></span>
+
+					</a>
+
+					<ul class="sub-menu">
+
+						<li >
+							<a href="{{ url_for('lightintensity') }}"  target="main-content">
+							  光强信息展示
+							</a>
+						</li>
+                        <li >
+							<a href="{{ url_for('temperature') }}"  target="main-content">
+							  温度信息展示
+							</a>
+						</li>
+						<li >
+							<a href="{{ url_for('atmospressure') }}"  target="main-content">
+							  气压信息展示
+							</a>
+						</li>
+						<li >
+							<a href="{{ url_for('humidity') }}"  target="main-content">
+							  湿度信息展示
+							</a>
+						</li>
+						<li >
+							<a href="{{ url_for('altitude') }}"  target="main-content">
+							  海拔信息展示
+							</a>
+						</li>
+					</ul>
+
+				</li>
+
+
+
+
 
 				<li class="">
 

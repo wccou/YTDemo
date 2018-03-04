@@ -490,10 +490,10 @@ def node_search():
             voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
 
 
-#节点信息查询
-@app.route('/node_sensor_infor/', methods=['POST', 'GET'])
-@app.route('/node_sensor_infor', methods=['POST', 'GET'])
-def node_sensor_infor():
+#光强信息查询
+@app.route('/lightintensity/', methods=['POST', 'GET'])
+@app.route('/lightintensity', methods=['POST', 'GET'])
+def lightintensity():
     nodeid_list = NetID_all()
     nodeid_list.sort()
     LOGIN = loginjudge()
@@ -507,7 +507,7 @@ def node_sensor_infor():
         nodepick  =  request.form['nodeselect']
         data = nodesearch_display(start_time,end_time,nodepick)
 
-        return render_template('./dataanalyzer/node_search.html',
+        return render_template('./dataanalyzer/lightintensity.html',
             nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
             voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
     else:
@@ -522,11 +522,155 @@ def node_sensor_infor():
             start_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
             data = nodesearch_display(start_time,end_time,nodepick)
 
-        return render_template('./dataanalyzer/node_sensor_infor.html',
+        return render_template('./dataanalyzer/lightintensity.html',
+            nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+
+#温度信息查询
+@app.route('/temperature/', methods=['POST', 'GET'])
+@app.route('/temperature', methods=['POST', 'GET'])
+def temperature():
+    nodeid_list = NetID_all()
+    nodeid_list.sort()
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        selectime  =  request.form['field_name']
+        start_time = selectime.encode("utf-8")[0:19]
+        end_time = selectime.encode("utf-8")[22:41]
+        nodepick  =  request.form['nodeselect']
+        data = nodesearch_display(start_time,end_time,nodepick)
+
+        return render_template('./dataanalyzer/temperature.html',
+            nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+    else:
+        if nodeid_list: 
+            nodepick    =  nodeid_list[0]
+            end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time  = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+        else:
+            nodepick = None
+            end_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+
+        return render_template('./dataanalyzer/temperature.html',
             nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
             voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
 
 
+#气压信息查询
+@app.route('/atmospressure/', methods=['POST', 'GET'])
+@app.route('/atmospressure', methods=['POST', 'GET'])
+def atmospressure():
+    nodeid_list = NetID_all()
+    nodeid_list.sort()
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        selectime  =  request.form['field_name']
+        start_time = selectime.encode("utf-8")[0:19]
+        end_time = selectime.encode("utf-8")[22:41]
+        nodepick  =  request.form['nodeselect']
+        data = nodesearch_display(start_time,end_time,nodepick)
+
+        return render_template('./dataanalyzer/atmospressure.html',
+            nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+    else:
+        if nodeid_list: 
+            nodepick    =  nodeid_list[0]
+            end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time  = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+        else:
+            nodepick = None
+            end_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+
+        return render_template('./dataanalyzer/atmospressure.html',
+            nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+
+#湿度信息查询
+@app.route('/humidity/', methods=['POST', 'GET'])
+@app.route('/humidity', methods=['POST', 'GET'])
+def humidity():
+    nodeid_list = NetID_all()
+    nodeid_list.sort()
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        selectime  =  request.form['field_name']
+        start_time = selectime.encode("utf-8")[0:19]
+        end_time = selectime.encode("utf-8")[22:41]
+        nodepick  =  request.form['nodeselect']
+        data = nodesearch_display(start_time,end_time,nodepick)
+
+        return render_template('./dataanalyzer/humidity.html',
+            nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+    else:
+        if nodeid_list: 
+            nodepick    =  nodeid_list[0]
+            end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time  = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+        else:
+            nodepick = None
+            end_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+
+        return render_template('./dataanalyzer/humidity.html',
+            nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+
+
+#海拔信息查询
+@app.route('/altitude/', methods=['POST', 'GET'])
+@app.route('/altitude', methods=['POST', 'GET'])
+def altitude():
+    nodeid_list = NetID_all()
+    nodeid_list.sort()
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    elif request.method == 'POST':
+        selectime  =  request.form['field_name']
+        start_time = selectime.encode("utf-8")[0:19]
+        end_time = selectime.encode("utf-8")[22:41]
+        nodepick  =  request.form['nodeselect']
+        data = nodesearch_display(start_time,end_time,nodepick)
+
+        return render_template('./dataanalyzer/altitude.html',
+            nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+    else:
+        if nodeid_list: 
+            nodepick    =  nodeid_list[0]
+            end_time    = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time  = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+        else:
+            nodepick = None
+            end_time = strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+            start_time = strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - 6*60*60))
+            data = nodesearch_display(start_time,end_time,nodepick)
+
+        return render_template('./dataanalyzer/altitude.html',
+            nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
+            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
 
 
 
