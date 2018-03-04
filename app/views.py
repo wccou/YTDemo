@@ -10,7 +10,7 @@ from utils.gxn_topo_decode  import TopoDecode
 from utils.gxn_get_sys_config import Config
 from utils.connect import Connect,loginjudge
 from utils.db_operate import DBClass
-from utils.display import multipledisplay,singledisplay,NetID_list,NetID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,appflowdisplay,restart_display
+from utils.display import multipledisplay,singledisplay,NetID_list,NetID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,sensor_data_display,appflowdisplay,restart_display
 from utils.error import data_error_new,syn_error
 
 from utils.old_data_display import Display, Modify
@@ -505,11 +505,10 @@ def lightintensity():
         start_time = selectime.encode("utf-8")[0:19]
         end_time = selectime.encode("utf-8")[22:41]
         nodepick  =  request.form['nodeselect']
-        data = nodesearch_display(start_time,end_time,nodepick)
+        data = sensor_data_display(start_time,end_time,nodepick)
 
-        return render_template('./dataanalyzer/lightintensity.html',
-            nodeid=nodepick,nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
-            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+#nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
+        return render_template('./dataanalyzer/lightintensity.html',nodeid = nodepick,time = data[11],nodelist = data[0],lightintensity = data[1],timeline = data[2])
     else:
         if nodeid_list: 
             nodepick    =  nodeid_list[0]
@@ -523,8 +522,7 @@ def lightintensity():
             data = nodesearch_display(start_time,end_time,nodepick)
 
         return render_template('./dataanalyzer/lightintensity.html',
-            nodeid=str(nodepick),nodelist = data[0],cpu=data[1],lpm=data[2],tx=data[3],rx=data[4],
-            voltage_list=data[5],time_list_1=data[6],time_list_2=data[7],current_list=data[8],time_list_3=data[9],rtx_list=data[10],deploy=data[11],time=data[12],time_list_4=data[13],beacon_list=data[14])
+            nodeid=str(nodepick),time = data[11],nodelist = data[0],lightintensity = data[1],timeline = data[2])
 
 #温度信息查询
 @app.route('/temperature/', methods=['POST', 'GET'])

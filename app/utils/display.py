@@ -312,25 +312,38 @@ def sensor_data_display(time1,time2,node):
     time_list_3 = list()
     time_list_4 = list()
     time_list_5 = list()
-    lightintensity = list()
-    temperature = list()
-    atmospressure = list()
-    humidity = list()
-    altitude = list()
+    lightintensity_list = list()
+    temperature_list = list()
+    atmospressure_list = list()
+    humidity_list = list()
+    altitude_list = list()
     nodeid_list = NetID_all()
     nodeid_list.sort()
 
-    lightintensity = DATABASE.my_db_execute('select Nodecurrenttime, light from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+    lightintensity = DATABASE.my_db_execute('select Nodecurrenttime, light from SensorData where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+    for i in range(len(lightintensity)):
+        time_list_1.append(lightintensity[i][0].encode('ascii'))
+        lightintensity_list.append(round(float(lightintensity[i][1]),2))
+    temperature = DATABASE.my_db_execute('select Nodecurrenttime, temperature from SensorData where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+    for i in range(len(temperature)):
+        time_list_2.append(temperature[i][0].encode('ascii'))
+        temperature_list.append(round(float(temperature[i][1]),2))
+    atmospressure = DATABASE.my_db_execute('select Nodecurrenttime, atmospressure from SensorData where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+    for i in range(len(atmospressure)):
+        time_list_3.append(atmospressure[i][0].encode('ascii'))
+        atmospressure_list.append(round(float(atmospressure[i][1]),2))
+    humidity = DATABASE.my_db_execute('select Nodecurrenttime, humidity from SensorData where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+    for i in range(len(humidity)):
+        time_list_4.append(humidity[i][0].encode('ascii'))
+        humidity_list.append(round(float(humidity[i][1]),2))
+    altitude = DATABASE.my_db_execute('select Nodecurrenttime, altitude from SensorData where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
+    for i in range(len(altitude)):
+        time_list_5.append(altitude[i][0].encode('ascii'))
+        altitude_list.append(round(float(altitude[i][1]),2))
 
-    temperature = DATABASE.my_db_execute('select Nodecurrenttime, temperature from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
-
-    atmospressure = DATABASE.my_db_execute('select Nodecurrenttime, atmospressure from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
-
-    humidity = DATABASE.my_db_execute('select Nodecurrenttime, humidity from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
-    
-    altitude = DATABASE.my_db_execute('select Nodecurrenttime, altitude from NetMonitor where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
-
-
+    timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
+    print node,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5
+    return nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
 
 def node_time_display(time1,time2,db,node):
     data = DATABASE.my_db_execute("select currenttime from " + db + " where NodeID==? and currenttime >= ? and currenttime <= ?;",(node, time1, time2))
