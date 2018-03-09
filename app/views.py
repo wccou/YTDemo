@@ -507,8 +507,8 @@ def lightintensity():
         nodepick  =  request.form['nodeselect']
         data = sensor_data_display(start_time,end_time,nodepick)
 
-#nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
-        return render_template('./dataanalyzer/lightintensity.html',nodeid = nodepick,time = data[11],nodelist = data[0],lightintensity = data[1],timeline = data[2])
+#nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay,deploy
+        return render_template('./dataanalyzer/lightintensity.html',nodeid = nodepick,time = data[11],nodelist = data[0],lightintensity = data[1],timeline = data[2],deploy = data[12])
     else:
         if nodeid_list: 
             nodepick    =  nodeid_list[0]
@@ -522,7 +522,7 @@ def lightintensity():
             data = sensor_data_display(start_time,end_time,nodepick)
 
         return render_template('./dataanalyzer/lightintensity.html',
-            nodeid=str(nodepick),time = data[11],nodelist = data[0],lightintensity = data[1],timeline = data[2])
+            nodeid=str(nodepick),time = data[11],nodelist = data[0],lightintensity = data[1],timeline = data[2],deploy = data[12])
 
 #温度信息查询
 @app.route('/temperature/', methods=['POST', 'GET'])
@@ -542,7 +542,7 @@ def temperature():
         data = sensor_data_display(start_time,end_time,nodepick)
 
 #nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
-        return render_template('./dataanalyzer/temperature.html',nodeid = nodepick,time = data[11],nodelist = data[0],temperature = data[3],timeline = data[4])
+        return render_template('./dataanalyzer/temperature.html',nodeid = nodepick,time = data[11],nodelist = data[0],temperature = data[3],timeline = data[4],deploy = data[12])
     else:
         if nodeid_list: 
             nodepick    =  nodeid_list[0]
@@ -556,7 +556,7 @@ def temperature():
             data = sensor_data_display(start_time,end_time,nodepick)
 
         return render_template('./dataanalyzer/temperature.html',
-            nodeid=str(nodepick),time = data[11],nodelist = data[0],temperature = data[3],timeline = data[4])
+            nodeid=str(nodepick),time = data[11],nodelist = data[0],temperature = data[3],timeline = data[4],deploy = data[12])
 
 #气压信息查询
 @app.route('/atmospressure/', methods=['POST', 'GET'])
@@ -576,7 +576,7 @@ def atmospressure():
         data = sensor_data_display(start_time,end_time,nodepick)
 
 #nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
-        return render_template('./dataanalyzer/atmospressure.html',nodeid = nodepick,time = data[11],nodelist = data[0],atmospressure = data[5],timeline = data[6])
+        return render_template('./dataanalyzer/atmospressure.html',nodeid = nodepick,time = data[11],nodelist = data[0],atmospressure = data[5],timeline = data[6],deploy = data[12])
     else:
         if nodeid_list: 
             nodepick    =  nodeid_list[0]
@@ -590,7 +590,7 @@ def atmospressure():
             data = sensor_data_display(start_time,end_time,nodepick)
 
         return render_template('./dataanalyzer/atmospressure.html',
-            nodeid=str(nodepick),time = data[11],nodelist = data[0],atmospressure = data[5],timeline = data[6])
+            nodeid=str(nodepick),time = data[11],nodelist = data[0],atmospressure = data[5],timeline = data[6],deploy = data[12])
 #湿度信息查询
 @app.route('/humidity/', methods=['POST', 'GET'])
 @app.route('/humidity', methods=['POST', 'GET'])
@@ -609,7 +609,7 @@ def humidity():
         data = sensor_data_display(start_time,end_time,nodepick)
 
 #nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
-        return render_template('./dataanalyzer/humidity.html',nodeid = nodepick,time = data[11],nodelist = data[0],humidity = data[7],timeline = data[8])
+        return render_template('./dataanalyzer/humidity.html',nodeid = nodepick,time = data[11],nodelist = data[0],humidity = data[7],timeline = data[8],deploy = data[12])
     else:
         if nodeid_list: 
             nodepick    =  nodeid_list[0]
@@ -623,7 +623,7 @@ def humidity():
             data = sensor_data_display(start_time,end_time,nodepick)
 
         return render_template('./dataanalyzer/humidity.html',
-            nodeid=str(nodepick),time = data[11],nodelist = data[0],humidity = data[7],timeline = data[8])
+            nodeid=str(nodepick),time = data[11],nodelist = data[0],humidity = data[7],timeline = data[8],deploy = data[12])
 #海拔信息查询
 @app.route('/altitude/', methods=['POST', 'GET'])
 @app.route('/altitude', methods=['POST', 'GET'])
@@ -642,7 +642,7 @@ def altitude():
         data = sensor_data_display(start_time,end_time,nodepick)
 
 #nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
-        return render_template('./dataanalyzer/altitude.html',nodeid = nodepick,time = data[11],nodelist = data[0],altitude = data[9],timeline = data[10])
+        return render_template('./dataanalyzer/altitude.html',nodeid = nodepick,time = data[11],nodelist = data[0],altitude = data[9],timeline = data[10],deploy = data[12])
     else:
         if nodeid_list: 
             nodepick    =  nodeid_list[0]
@@ -656,7 +656,7 @@ def altitude():
             data = sensor_data_display(start_time,end_time,nodepick)
 
         return render_template('./dataanalyzer/altitude.html',
-            nodeid=str(nodepick),time = data[11],nodelist = data[0],altitude = data[9],timeline = data[10])
+            nodeid=str(nodepick),time = data[11],nodelist = data[0],altitude = data[9],timeline = data[10],deploy = data[12])
 
 
 #节点部署信息查询
@@ -1504,7 +1504,7 @@ def update_schedule():
             senddicts["pama_data"] = config_dict
             senddicts["type"] = "pama_syn"
             update_synperiod_ins = json.dumps(senddicts)
-            #sendins.TCP_send(update_synperiod_ins)
+            sendins.TCP_send(update_synperiod_ins)
             print update_synperiod_ins
         else:
             bitmaplist = config_dict["bitmap"]

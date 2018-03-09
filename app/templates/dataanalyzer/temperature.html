@@ -163,6 +163,28 @@
          </div> 
 </div>
 
+
+<table class="table table-bordered">
+      <thead>
+        <tr>
+            <th class="text-center">节点ID</th>
+            <th class="text-center">表ID</th>
+            <th class="text-center">存放位置</th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+      <tr data-toggle="modal" data-target="#myModal">
+          <td class="text-nowrap text-center">{{ deploy[0] }}</td>
+          <td class="text-center text-nowrap">{{ deploy[1] }}</td>
+          <td class="text-center text-nowrap">{{ deploy[2] }}</td>
+         
+        </tr>
+      </tbody>
+    </table>                  
+
+
     <div id="temperature" style="height:600px;width:100%;float:left"></div>
 
 
@@ -194,7 +216,7 @@
 
                 option = {
                     title : {
-                        text: '温度变化',
+                        text: '温度变化：单位℃',
                     },
                     tooltip : {
                         trigger: 'axis'
@@ -234,7 +256,7 @@
                     ],
                     series : [
                         {
-                            name:'温度',
+                            name:'温度（℃）',
                             type:'line',
                             data:{{temperature}},
                             itemStyle:{

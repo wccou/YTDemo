@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>光强信息展示</title>
+    <title>气压信息展示</title>
 
    <link href="../../static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="../../static/bootstrap-3.3.5/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
@@ -163,6 +163,27 @@
          </div> 
 </div>
 
+
+<table class="table table-bordered">
+      <thead>
+        <tr>
+            <th class="text-center">节点ID</th>
+            <th class="text-center">表ID</th>
+            <th class="text-center">存放位置</th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+      <tr data-toggle="modal" data-target="#myModal">
+          <td class="text-nowrap text-center">{{ deploy[0] }}</td>
+          <td class="text-center text-nowrap">{{ deploy[1] }}</td>
+          <td class="text-center text-nowrap">{{ deploy[2] }}</td>
+         
+        </tr>
+      </tbody>
+    </table>                  
+
     <div id="atmospressure" style="height:600px;width:100%;float:left"></div>
 
 
@@ -194,7 +215,7 @@
 
                 option = {
                     title : {
-                        text: '气压变化',
+                        text: '气压变化：单位pa',
                     },
                     tooltip : {
                         trigger: 'axis'
@@ -234,7 +255,7 @@
                     ],
                     series : [
                         {
-                            name:'气压',
+                            name:'气压（pa）',
                             type:'line',
                             data:{{atmospressure}},
                             itemStyle:{

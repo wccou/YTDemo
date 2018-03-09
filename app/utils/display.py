@@ -320,6 +320,15 @@ def sensor_data_display(time1,time2,node):
     nodeid_list = NetID_all()
     nodeid_list.sort()
 
+    deploy_info = DATABASE.my_db_execute('select NodeID, MeterID, Place from NodePlace where NodeID == ?;',(node,))
+    if deploy_info:
+        deploy = list()
+        deploy.append(deploy_info[0][0].encode('ascii'))
+        deploy.append(deploy_info[0][1].encode('ascii'))
+        deploy.append(deploy_info[0][2])
+    else:
+        deploy = ["no data","no data","no data"]
+
     lightintensity = DATABASE.my_db_execute('select Nodecurrenttime, light from SensorData where currenttime >= ? and currenttime <= ? and NodeID == ?;',(time1, time2, node))
     for i in range(len(lightintensity)):
         time_list_1.append(lightintensity[i][0].encode('ascii'))
@@ -343,7 +352,7 @@ def sensor_data_display(time1,time2,node):
 
     timedisplay = ("\""+time1 + ' - ' + time2+"\"").encode('ascii')
     print node,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5
-    return nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay
+    return nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay,deploy
 
 def node_time_display(time1,time2,db,node):
     data = DATABASE.my_db_execute("select currenttime from " + db + " where NodeID==? and currenttime >= ? and currenttime <= ?;",(node, time1, time2))

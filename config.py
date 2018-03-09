@@ -9,10 +9,10 @@ SECRET_KEY = '!@#$%8F6F98EC3684AECA1DC44E1CB816E4A5^&*()'
 #CLIENT_FOLDER = '/home/weichenchen/Documents/Concentrator/socket/'
 #CONFIG_FOLDER = '/root/concentratorback/'
 
-TOPO_FOLDER   = '/home/weichenchen/Documents/YTDemo/datalog/'
-DB_FOLDER     = '/home/weichenchen/Documents/YTDemo/datalog/'
+TOPO_FOLDER   = '/home/weichenchen/eclipse-workspace/ConsoleMainServerProgram/'
+DB_FOLDER     = '/home/weichenchen/eclipse-workspace/ConsoleMainServerProgram/'
 CLIENT_FOLDER = '/home/weichenchen/Documents/YTDemo/socket/'
-CONFIG_FOLDER = '/home/weichenchen/Documents/YTDemo/app/utils/Config'
+CONFIG_FOLDER = '/home/weichenchen/eclipse-workspace/ConsoleMainServerProgram/'
 
 #TOPO_FOLDER   = '/home/winzzhhzzhh/lab/Concentrator/datalog/'
 #DB_FOLDER     = '/home/winzzhhzzhh/lab/Concentrator/datalog/'
