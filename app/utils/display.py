@@ -79,6 +79,23 @@ def NetID_all():
         ID_list.append(ID.encode('ascii'))
     return ID_list
 
+def SensorDataID_all():
+    ID_list = list()
+    ID_set = DATABASE.my_db_execute("select distinct NodeID from SensorData;",None)
+    for i in range(len(ID_set)):
+        if len(ID_set[i][0])==3:
+            ID = "0"+ID_set[i][0]
+        elif len(ID_set[i][0]) ==2:
+            ID = "00"+ID_set[i][0]
+        elif len(ID_set[i][0])==1:
+            ID = "000"+ID_set[i][0]
+        elif len(ID_set[i][0])==4:
+            ID = ID_set[i][0]
+        else:
+            return False
+        ID_list.append(ID.encode('ascii'))
+    return ID_list
+
 def AppID_all():
     ID_list = list()
     ID_set = DATABASE.my_db_execute("select distinct NodeID from ApplicationData;",None)
@@ -317,7 +334,7 @@ def sensor_data_display(time1,time2,node):
     atmospressure_list = list()
     humidity_list = list()
     altitude_list = list()
-    nodeid_list = NetID_all()
+    nodeid_list = SensorDataID_all()
     nodeid_list.sort()
 
     deploy_info = DATABASE.my_db_execute('select NodeID, MeterID, Place from NodePlace where NodeID == ?;',(node,))

@@ -10,7 +10,7 @@ from utils.gxn_topo_decode  import TopoDecode
 from utils.gxn_get_sys_config import Config
 from utils.connect import Connect,loginjudge
 from utils.db_operate import DBClass
-from utils.display import multipledisplay,singledisplay,NetID_list,NetID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,sensor_data_display,appflowdisplay,restart_display
+from utils.display import multipledisplay,singledisplay,NetID_list,NetID_all,SensorDataID_all,AppID_all,selectall,node_time_display,topo_display,energy_display,flowdisplay,protodisplay,nodesearch_display,sensor_data_display,appflowdisplay,restart_display
 from utils.error import data_error_new,syn_error
 
 from utils.old_data_display import Display, Modify
@@ -494,7 +494,7 @@ def node_search():
 @app.route('/lightintensity/', methods=['POST', 'GET'])
 @app.route('/lightintensity', methods=['POST', 'GET'])
 def lightintensity():
-    nodeid_list = NetID_all()
+    nodeid_list = SensorDataID_all()
     nodeid_list.sort()
     LOGIN = loginjudge()
     if LOGIN.getPCAPS() == "False":
@@ -506,6 +506,10 @@ def lightintensity():
         end_time = selectime.encode("utf-8")[22:41]
         nodepick  =  request.form['nodeselect']
         data = sensor_data_display(start_time,end_time,nodepick)
+        print data[0],nodepick
+        print ".........................."
+        print data[1]
+        print data[2]
 
 #nodeid_list,lightintensity_list,time_list_1,temperature_list,time_list_2,atmospressure_list,time_list_3,humidity_list,time_list_4,altitude_list,time_list_5,timedisplay,deploy
         return render_template('./dataanalyzer/lightintensity.html',nodeid = nodepick,time = data[11],nodelist = data[0],lightintensity = data[1],timeline = data[2],deploy = data[12])
@@ -523,6 +527,9 @@ def lightintensity():
 
         return render_template('./dataanalyzer/lightintensity.html',
             nodeid=str(nodepick),time = data[11],nodelist = data[0],lightintensity = data[1],timeline = data[2],deploy = data[12])
+
+
+
 
 #温度信息查询
 @app.route('/temperature/', methods=['POST', 'GET'])
@@ -846,6 +853,89 @@ def monitor():
     print force_open_valve
     print force_close_valve
     return render_template('./client/monitor.html',send_data = send_data, wait_time = wait_time*10,now_hour = now_hour,write_data = write_data, auto_on_off_valve = auto_on_off_valve, force_open_valve = force_open_valve, force_close_valve = force_close_valve, adjtime_data = adjtime_data, display_datadict = display_datadict,IP_list=IP_list)
+
+
+
+@app.route('/actreport/', methods=['POST', 'GET'])
+@app.route('/actreport', methods=['POST', 'GET'])
+def actreport():
+################################################3
+    file = open("shedule_now.txt","r")                      #[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+    print "ada"
+    bitmap = []
+    for line in file:
+        f = line.split(",")
+        f.pop()
+        for i in f:
+            bitmap.append(int(i))
+        #print bitmap
+
+    bitbitmap = [0]*144
+    for i in range (0, 18):
+        temp = bitmap[i]
+        eight = []
+        print temp
+        for j in range (0, 8):
+            eight.append(temp & 1)
+            temp = temp >> 1
+            bitbitmap[8 * i + 7 - j] = eight.pop()
+        print eight
+
+    print bitbitmap
+
+
+    now_time = datetime.datetime.now()
+    now_second = now_time.second
+    now_minute = now_time.minute
+    now_hour = now_time.hour
+    print now_time, now_hour, now_minute, now_second
+
+    count = now_hour*6+now_minute/10
+
+    print "第",count+1,"个"
+    if (bitbitmap[count]==1):
+        flag = 1
+    else:
+        flag = 0
+    print flag
+    #flag = 1
+    if (flag == 0):   #说明处于非活跃周期
+        wait_time = now_minute/10 + 1
+        if (wait_time == 6):
+            wait_time =0
+            now_hour = (now_hour + 1) % 24
+        print "当前处于非活跃期，还需要等待%d秒" % wait_time
+    else:
+        wait_time = now_minute/10
+        print "当前处于活跃期，不需要等待"
+    
+#############################################
+
+    LOGIN = loginjudge()
+    if LOGIN.getPCAPS() == "False":
+        flash(u"请完成认证登陆!")
+        return redirect(url_for('login'))
+    else:
+        display = Display()
+        send_data = display.send_display() #旧数据展示
+        write_data = display.write_display()
+        auto_on_off_valve = display.auto_on_off_valve()
+        force_open_valve = display.force_open_valve()
+        force_close_valve = display.force_close_valve()
+        adjtime_data = display.adjtime_display()
+        display_datadict = display.parameters_display()
+        # print display_datadict
+        IP_list = list()
+        IP_set = DATABASE.my_db_execute(("select distinct IP from NodePlace;"),None)
+        for item in IP_set:
+            IP_list.append(item[0])
+    print auto_on_off_valve
+    print force_open_valve
+    print force_close_valve
+    return render_template('./dataanalyzer/actreport.html',send_data = send_data, wait_time = wait_time*10,now_hour = now_hour,write_data = write_data, auto_on_off_valve = auto_on_off_valve, force_open_valve = force_open_valve, force_close_valve = force_close_valve, adjtime_data = adjtime_data, display_datadict = display_datadict,IP_list=IP_list)
+
+
+
 
 @app.route('/instruction_send/', methods=['POST', 'GET'])
 @app.route('/instruction_send', methods=['POST', 'GET'])
